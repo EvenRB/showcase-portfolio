@@ -1,0 +1,28 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import type { Project } from '../lib/projects';
+
+interface Props {
+  projects: Project[];
+  promote?: boolean;
+}
+const { projects, promote = false } = Astro.props;
+
+// In 'promote' mode the 2 projects with featured:true span 2 cols of a 4-col
+// grid; everyone else spans 1. Default 'flat' mode is a 3-col grid with all
+// cards the same size.
+let featCount = 0;
+const layout = promote ? 'promote' : 'flat';
+const cells = projects.map(p => {
+  if (!promote) return { p, span: 'sm' as const };
+  if (p.data.featured && featCount < 2) { featCount++; return { p, span: 'lg' as const }; }
+  return { p, span: 'sm' as const };
+});
+---
+<div class={`bento mode-${layout}`}>
+  {cells.map(({ p, span }) => (
+    <div class={`bento-cell span-${span}`}>
+      <ProjectCard p={p} span={span} />
+    </div>
+  ))}
+</div>

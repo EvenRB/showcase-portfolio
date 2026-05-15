@@ -1,0 +1,134 @@
+---
+import PreviewArt from './PreviewArt.astro';
+import { hostOf } from '../lib/projects';
+interface Props {
+  liveUrl?: string;
+  repoUrl?: string;
+  mood?: string;
+  base?: string;
+  accent?: string;
+  ratio?: string;
+  title: string;
+  id: string;
+}
+const { liveUrl = '', repoUrl = '', mood = 'default', base = '#1a1a1a', accent = '#888', ratio = '4 / 3', title, id } = Astro.props;
+const host = hostOf(liveUrl);
+---
+<div class="lp-slot" style={`aspect-ratio: ${ratio}`} data-lp-slot data-live={liveUrl}>
+  <div class="lp-art" data-active="true" data-lp-art>
+    <PreviewArt mood={mood} base={base} accent={accent} />
+  </div>
+
+  {liveUrl && (
+    <>
+      <div class="lp-host mono">
+        <a href={liveUrl} target="_blank" rel="noopener" class="lp-host-link" onclick="event.stopPropagation();">
+          <span class="lp-host-dot"></span>
+          {host}
+          <span class="lp-host-arrow">↗</span>
+        </a>
+      </div>
+
+      <button type="button" class="lp-toggle" data-lp-toggle>
+        <span class="lp-toggle-dot"></span>
+        <span class="lp-toggle-label">Live preview</span>
+      </button>
+    </>
+  )}
+
+  {repoUrl && (
+    <a href={repoUrl} target="_blank" rel="noopener" class="lp-gh mono" onclick="event.stopPropagation();">
+      <span class="lp-gh-glyph">◧</span>
+      <span class="lp-gh-label">View code</span>
+      <span class="vc-arrow">↗</span>
+    </a>
+  )}
+</div>
+
+<script>
+  function bindLivePreview(slot: HTMLElement) {
+    const url = slot.getAttribute('data-live') || '';
+    if (!url) return;
+    const toggle = slot.querySelector<HTMLButtonElement>('[data-lp-toggle]');
+    const art    = slot.querySelector<HTMLElement>('[data-lp-art]');
+    if (!toggle || !art) return;
+
+    let mode: 'art' | 'loading' | 'live' | 'blocked' = 'art';
+    let iframe: HTMLIFrameElement | null = null;
+    let timeout: number | null = null;
+
+    function label() {
+      const l = toggle!.querySelector('.lp-toggle-label');
+      if (!l) return;
+      if (mode === 'loading') l.textContent = 'Loading…';
+      else if (mode === 'live') l.textContent = 'Live · stop';
+      else l.textContent = 'Live preview';
+    }
+
+    function setOverlay(kind: 'loading' | 'blocked' | null) {
+      slot.querySelectorAll('.lp-overlay').forEach(o => o.remove());
+      if (!kind) return;
+      const ov = document.createElement('div');
+      ov.className = 'lp-overlay ' + kind;
+      if (kind === 'loading') {
+        ov.innerHTML = '<span class="lp-spinner"></span><span class="mono lp-status">connecting…</span>';
+      } else {
+        ov.innerHTML = '<span class="mono lp-status">preview blocked by site headers</span>' +
+          '<a href="' + url + '" target="_blank" rel="noopener" class="lp-openext mono">open in new tab <span class="vc-arrow">↗</span></a>';
+      }
+      slot.appendChild(ov);
+    }
+
+    function mountIframe() {
+      if (iframe) return;
+      const wrap = document.createElement('div');
+      wrap.className = 'lp-iframe-wrap';
+      wrap.dataset.active = 'true';
+      iframe = document.createElement('iframe');
+      iframe.src = url;
+      iframe.title = slot.getAttribute('data-title') || 'Live preview';
+      iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin');
+      iframe.setAttribute('referrerpolicy', 'no-referrer');
+      iframe.loading = 'lazy';
+      iframe.addEventListener('load', () => {
+        if (timeout) { clearTimeout(timeout); timeout = null; }
+        if (mode === 'loading') { mode = 'live'; setOverlay(null); label(); toggle!.classList.add('is-on'); }
+      });
+      wrap.appendChild(iframe);
+      slot.appendChild(wrap);
+    }
+
+    function unmountIframe() {
+      iframe?.parentElement?.remove();
+      iframe = null;
+    }
+
+    toggle.addEventListener('click', (e) => {
+      e.preventDefault(); e.stopPropagation();
+      if (mode === 'live' || mode === 'loading') {
+        mode = 'art';
+        setOverlay(null);
+        unmountIframe();
+        toggle.classList.remove('is-on');
+        if (timeout) { clearTimeout(timeout); timeout = null; }
+        label();
+        return;
+      }
+      mode = 'loading';
+      label();
+      setOverlay('loading');
+      mountIframe();
+      timeout = window.setTimeout(() => {
+        if (mode === 'loading') {
+          mode = 'blocked';
+          unmountIframe();
+          setOverlay('blocked');
+          toggle.classList.remove('is-on');
+          label();
+        }
+      }, 6000);
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-lp-slot]').forEach(bindLivePreview);
+</script>

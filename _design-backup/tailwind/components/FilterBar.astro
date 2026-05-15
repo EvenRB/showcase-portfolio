@@ -1,0 +1,58 @@
+---
+const tabs = [
+  { label: 'All Projects', filter: 'all',    icon: '⊞' },
+  { label: 'Now',          filter: 'now',    icon: '◎' },
+  { label: 'Future',       filter: 'future', icon: '◷' },
+  { label: 'All',          filter: 'all2',   icon: '✳' },
+  { label: 'Bio',          filter: 'bio',    icon: '⧖' },
+]
+---
+<nav class="flex items-center border-b border-gray-200 mb-5 gap-0">
+  <div class="flex flex-1 overflow-x-auto">
+    {tabs.map(t => (
+      <button
+        data-filter={t.filter}
+        class="filter-btn border-b-2 border-transparent px-3 py-1.5 text-xs
+               text-gray-500 hover:text-gray-900 whitespace-nowrap
+               flex items-center gap-1 -mb-px transition-colors"
+      >
+        <span>{t.icon}</span>{t.label}
+      </button>
+    ))}
+  </div>
+  <div class="flex gap-1 pb-1">
+    <button id="btn-gallery" class="view-btn active border border-gray-200
+      rounded px-1.5 py-1 text-xs text-gray-500 hover:text-gray-900">⊞</button>
+    <button id="btn-table" class="view-btn border border-gray-200
+      rounded px-1.5 py-1 text-xs text-gray-500 hover:text-gray-900">☰</button>
+  </div>
+</nav>
+<script>
+  const filterBtns = document.querySelectorAll('.filter-btn')
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('border-gray-900','text-gray-900','font-medium'))
+      btn.classList.add('border-gray-900','text-gray-900','font-medium')
+      const f = (btn as HTMLElement).dataset.filter
+      document.querySelectorAll('.project-card').forEach(c => {
+        const card = c as HTMLElement
+        if (f === 'all' || f === 'all2') { card.style.display = ''; return }
+        if (f === 'now')    { card.style.display = card.dataset.status === 'WIP' ? '' : 'none'; return }
+        if (f === 'future') { card.style.display = card.dataset.status === 'Soon' || card.dataset.status === 'One day' ? '' : 'none'; return }
+        if (f === 'bio')    { card.style.display = 'none'; return }
+      })
+    })
+  })
+  document.getElementById('btn-gallery')?.addEventListener('click', () => {
+    document.getElementById('gallery-view')!.style.display = ''
+    document.getElementById('table-view')!.style.display = 'none'
+    document.getElementById('btn-gallery')!.classList.add('bg-gray-100')
+    document.getElementById('btn-table')!.classList.remove('bg-gray-100')
+  })
+  document.getElementById('btn-table')?.addEventListener('click', () => {
+    document.getElementById('gallery-view')!.style.display = 'none'
+    document.getElementById('table-view')!.style.display = ''
+    document.getElementById('btn-table')!.classList.add('bg-gray-100')
+    document.getElementById('btn-gallery')!.classList.remove('bg-gray-100')
+  })
+</script>

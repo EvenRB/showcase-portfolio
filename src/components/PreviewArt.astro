@@ -1,0 +1,187 @@
+---
+// Generative mini-UI rendered per project mood. CSS-only.
+interface Props {
+  mood:    string;
+  base:    string;
+  accent:  string;
+}
+const { mood = 'default', base = '#1a1a1a', accent = '#888' } = Astro.props;
+---
+{mood === 'editor' && (
+  <div class="pa pa-editor" style={`background: ${base}`}>
+    <div class="pa-sidebar">
+      {[1,2,3,4,5,6].map(i => <span class="pa-line" style={`width: ${60 - i*5}%`} />)}
+    </div>
+    <div class="pa-main">
+      <div class="pa-tabs">
+        <span class="pa-tab active" style={`background: ${accent}`}></span>
+        <span class="pa-tab"></span>
+        <span class="pa-tab"></span>
+      </div>
+      {[1,2,3,4,5,6,7].map(i => (
+        <div class="pa-coderow">
+          <span class="pa-linum">{String(i).padStart(2,'0')}</span>
+          <span class="pa-code" style={`width: ${35 + (i*13)%55}%`}></span>
+          {i % 3 === 0 && <span class="pa-code accent" style={`background: ${accent}; width: 20%`}></span>}
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
+{mood === 'voice' && (
+  <div class="pa pa-voice" style={`background: ${base}`}>
+    <div class="pa-voice-head">
+      <span class="pa-avatar" style={`background: ${accent}`}></span>
+      <span class="pa-name"></span>
+      <span class="pa-dot" style={`background: ${accent}`}></span>
+    </div>
+    <div class="pa-wave">
+      {Array.from({length: 32}).map((_, i) => {
+        const h = 20 + Math.sin(i*0.7)*30 + (i%5)*8;
+        return <span style={`height: ${h}%; background: ${i > 18 ? accent : 'rgba(255,255,255,0.55)'}`}></span>;
+      })}
+    </div>
+    <div class="pa-controls">
+      <span class="pa-ctl" style={`background: ${accent}`}></span>
+      <span class="pa-ctl small"></span>
+      <span class="pa-ctl small"></span>
+    </div>
+  </div>
+)}
+
+{mood === 'map' && (
+  <div class="pa pa-map" style={`background: ${base}`}>
+    <div class="pa-grid">
+      {Array.from({length: 48}).map(() => <span />)}
+    </div>
+    <svg viewBox="0 0 100 60" preserveAspectRatio="none" class="pa-routes">
+      <path d="M5,50 Q25,10 50,30 T95,15" stroke={accent} stroke-width="1.2" fill="none" />
+      <path d="M10,45 Q35,40 60,50 T90,40" stroke="rgba(255,255,255,0.55)" stroke-width="0.7" fill="none" />
+      <circle cx="5"  cy="50" r="1.5" fill={accent} />
+      <circle cx="50" cy="30" r="1.5" fill={accent} />
+      <circle cx="95" cy="15" r="1.5" fill={accent} />
+    </svg>
+  </div>
+)}
+
+{mood === 'graph' && (
+  <div class="pa pa-graph" style={`background: ${base}`}>
+    <svg viewBox="0 0 100 60" preserveAspectRatio="none">
+      <line x1="20" y1="15" x2="50" y2="30" stroke="rgba(255,255,255,0.55)" stroke-width="0.4" />
+      <line x1="50" y1="30" x2="80" y2="18" stroke="rgba(255,255,255,0.55)" stroke-width="0.4" />
+      <line x1="50" y1="30" x2="35" y2="48" stroke="rgba(255,255,255,0.55)" stroke-width="0.4" />
+      <line x1="50" y1="30" x2="75" y2="45" stroke="rgba(255,255,255,0.55)" stroke-width="0.4" />
+      <line x1="20" y1="15" x2="35" y2="48" stroke="rgba(255,255,255,0.55)" stroke-width="0.4" />
+      <line x1="80" y1="18" x2="75" y2="45" stroke="rgba(255,255,255,0.55)" stroke-width="0.4" />
+      <circle cx="20" cy="15" r="2.5" fill="rgba(255,255,255,0.55)" />
+      <circle cx="50" cy="30" r="3.5" fill={accent} />
+      <circle cx="80" cy="18" r="2.5" fill="rgba(255,255,255,0.55)" />
+      <circle cx="35" cy="48" r="2"   fill="rgba(255,255,255,0.55)" />
+      <circle cx="75" cy="45" r="2.8" fill="rgba(255,255,255,0.55)" />
+    </svg>
+  </div>
+)}
+
+{mood === 'list' && (
+  <div class="pa pa-list" style={`background: ${base}`}>
+    <div class="pa-listhead">
+      <span class="pa-pill" style={`background: ${accent}`}></span>
+      <span class="pa-pill ghost"></span>
+      <span class="pa-pill ghost"></span>
+    </div>
+    {Array.from({length: 5}).map((_, i) => (
+      <div class="pa-listrow">
+        <span class="pa-thumb" style={`background: ${i % 2 ? accent : 'rgba(255,255,255,0.22)'}`}></span>
+        <span class="pa-listtxt" style={`width: ${45 + (i*17)%40}%`}></span>
+        <span class="pa-listmeta"></span>
+      </div>
+    ))}
+  </div>
+)}
+
+{mood === 'doc' && (
+  <div class="pa pa-doc" style={`background: ${base}`}>
+    <span class="pa-doc-title" style={`background: ${accent}`}></span>
+    {Array.from({length: 9}).map((_, i) => (
+      <span class="pa-doc-line" style={`width: ${50 + (i*19)%45}%`}></span>
+    ))}
+  </div>
+)}
+
+{mood === 'cli' && (
+  <div class="pa pa-cli" style={`background: ${base}`}>
+    <div class="pa-prompt"><span style={`color: ${accent}`}>$ </span><span>oxide init my-app</span></div>
+    <div class="pa-cli-out">✓ project scaffolded</div>
+    <div class="pa-cli-out">✓ dependencies installed</div>
+    <div class="pa-prompt"><span style={`color: ${accent}`}>$ </span><span>oxide dev</span><span class="pa-caret" style={`background: ${accent}`}></span></div>
+  </div>
+)}
+
+{mood === 'table' && (
+  <div class="pa pa-table" style={`background: ${base}`}>
+    <div class="pa-table-grid">
+      {Array.from({length: 24}).map((_, i) => (
+        <span style={`background: ${i < 6 ? 'rgba(255,255,255,0.22)' : (i % 7 === 0 ? accent : 'rgba(255,255,255,0.10)')}; opacity: ${i < 6 ? 1 : 0.7}`}></span>
+      ))}
+    </div>
+  </div>
+)}
+
+{mood === 'dashboard' && (
+  <div class="pa pa-dashboard" style={`background: ${base}`}>
+    <div class="pa-dash-row">
+      <div class="pa-dash-card">
+        <span class="pa-dash-label"></span>
+        <span class="pa-dash-num" style={`background: ${accent}`}></span>
+      </div>
+      <div class="pa-dash-card">
+        <span class="pa-dash-label"></span>
+        <span class="pa-dash-num"></span>
+      </div>
+    </div>
+    <div class="pa-dash-chart">
+      {Array.from({length: 14}).map((_, i) => {
+        const h = 30 + (Math.sin(i*0.9)*40 + (i*7)%30);
+        return <span style={`height: ${h}%; background: ${i > 9 ? accent : 'rgba(255,255,255,0.55)'}`}></span>;
+      })}
+    </div>
+  </div>
+)}
+
+{mood === 'reader' && (
+  <div class="pa pa-reader" style={`background: ${base}`}>
+    <div class="pa-reader-col">
+      {Array.from({length: 10}).map((_, i) => (
+        <span style={`width: ${60 + (i*11)%35}%`}></span>
+      ))}
+    </div>
+    <div class="pa-reader-highlight" style={`background: ${accent}`}></div>
+  </div>
+)}
+
+{mood === 'system' && (
+  <div class="pa pa-system" style={`background: ${base}`}>
+    <div class="pa-system-grid">
+      {['btn','btn','input','input','card','card','card','badge','badge'].map((k, i) => (
+        <span class={`pa-comp k-${k}`} style={`background: ${i % 5 === 0 ? accent : 'rgba(255,255,255,0.22)'}`}></span>
+      ))}
+    </div>
+  </div>
+)}
+
+{mood === 'cms' && (
+  <div class="pa pa-cms" style={`background: ${base}`}>
+    <span class="pa-cms-h" style={`background: ${accent}`}></span>
+    {Array.from({length: 4}).map(() => (
+      <div class="pa-cms-field">
+        <span class="pa-cms-label"></span>
+        <span class="pa-cms-input"></span>
+      </div>
+    ))}
+  </div>
+)}
+
+{(!mood || mood === 'default') && (
+  <div class="pa pa-default" style={`background: ${base}`}></div>
+)}

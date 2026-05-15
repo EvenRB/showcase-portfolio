@@ -1,0 +1,16 @@
+---
+interface Lang { name: string; pct: number; color: string }
+interface Props { langs?: Lang[] | null; height?: number; }
+const { langs, height = 2 } = Astro.props;
+const list = langs ?? [];
+---
+{list.length === 0
+  ? <div class="lang-bar empty" style={`height: ${height}px`}></div>
+  : (
+    <div class="lang-bar" style={`height: ${height}px`}>
+      {list.map(l => (
+        <span style={`width: ${l.pct}%; background: ${l.color}`} title={`${l.name} ${l.pct}%`}></span>
+      ))}
+    </div>
+  )
+}

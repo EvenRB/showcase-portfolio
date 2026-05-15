@@ -1,0 +1,19 @@
+---
+interface Props {
+  status: 'WIP' | 'Shipped' | 'RIP' | 'Soon' | 'One day';
+  size?: number;
+}
+const { status, size = 6 } = Astro.props;
+const META: Record<string, { dot: string; live: boolean }> = {
+  WIP:      { dot: 'var(--accent)', live: true  },
+  Shipped:  { dot: 'var(--ink)',    live: false },
+  RIP:      { dot: '#B8B1A4',       live: false },
+  Soon:     { dot: '#B8B1A4',       live: false },
+  'One day':{ dot: '#D9D3C6',       live: false },
+};
+const m = META[status] ?? META['Soon'];
+---
+<span class="status-pulse" style={`--dot: ${m.dot}; --sz: ${size}px`}>
+  <span class="dot"></span>
+  {m.live && <span class="ring"></span>}
+</span>

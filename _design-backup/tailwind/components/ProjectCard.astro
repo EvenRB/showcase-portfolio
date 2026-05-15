@@ -1,0 +1,38 @@
+---
+import { TAG_COLORS, STATUS_COLORS } from '../lib/tagColors'
+interface Props {
+  title: string; status: string; dateRange?: string
+  tags: string[]; image?: string; emoji?: string; url?: string
+}
+const { title, status, dateRange, tags, image, emoji, url } = Astro.props
+const st = STATUS_COLORS[status] ?? STATUS_COLORS['Soon']
+---
+<article class="border border-gray-200 rounded-md overflow-hidden bg-white
+                transition-transform duration-150 hover:-translate-y-0.5
+                hover:border-gray-400 cursor-pointer">
+  <a href={url ?? '#'} target={url ? '_blank' : '_self'} rel="noopener">
+    <div class="aspect-video bg-gray-100 overflow-hidden">
+      {image
+        ? <img src={image} alt={title} class="w-full h-full object-cover" loading="lazy" />
+        : <div class="w-full h-full flex items-center justify-content-center
+                      text-gray-300 text-sm">{emoji ?? '📁'}</div>}
+    </div>
+  </a>
+  <div class="p-2.5">
+    <p class="font-medium text-sm text-gray-900 mb-0.5 leading-snug">
+      {emoji && <span class="mr-1">{emoji}</span>}{title}
+    </p>
+    {dateRange && <p class="text-xs text-gray-400 mb-1.5">{dateRange}</p>}
+    <div class="flex flex-wrap gap-1">
+      <span class={`text-[10.5px] px-1.5 py-0.5 rounded font-medium ${st.badge}`}>
+        {status}
+      </span>
+      {tags.map(tag => (
+        <span class={`text-[10.5px] px-1.5 py-0.5 rounded font-medium
+          ${TAG_COLORS[tag] ?? 'bg-gray-100 text-gray-600'}`}>
+          {tag}
+        </span>
+      ))}
+    </div>
+  </div>
+</article>

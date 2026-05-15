@@ -1,0 +1,69 @@
+---
+interface Props {
+  count: number;
+  initialView?: 'gallery' | 'table';
+}
+const { count, initialView = 'gallery' } = Astro.props;
+
+const tabs = [
+  { id: 'all',    label: 'All Projects', glyph: '⊞' },
+  { id: 'now',    label: 'Now',          glyph: '◎' },
+  { id: 'future', label: 'Future',       glyph: '◷' },
+  { id: 'gigs',   label: 'Freelance',    glyph: '◧' },
+  { id: 'jobs',   label: 'Jobs',         glyph: '◨' },
+];
+---
+<nav class="filter-bar" data-active="now">
+  <div class="fb-tabs">
+    {tabs.map(t => (
+      <button class={`fb-tab ${t.id === 'now' ? 'is-active' : ''}`} data-filter={t.id}>
+        <span class="fb-glyph">{t.glyph}</span>
+        <span>{t.label}</span>
+      </button>
+    ))}
+  </div>
+  <div class="fb-view">
+    <button class={`fb-view-btn ${initialView === 'gallery' ? 'is-active' : ''}`} data-view="gallery">
+      <span class="fb-glyph">⊞</span><span class="fb-view-lbl">Gallery</span>
+    </button>
+    <button class={`fb-view-btn ${initialView === 'table' ? 'is-active' : ''}`} data-view="table">
+      <span class="fb-glyph">☰</span><span class="fb-view-lbl">Table</span>
+    </button>
+  </div>
+</nav>
+
+<!-- Live count chip shows how many projects match the current filter -->
+<script define:vars={{ count }}>
+  const root = document.querySelector('.filter-bar');
+  if (root) {
+    const tabs = root.querySelectorAll('[data-filter]');
+    const cards = () => document.querySelectorAll('[data-project-card]');
+
+    function applyFilter(id) {
+      const all = cards();
+      let shown = 0;
+      all.forEach((c) => {
+        const status = c.getAttribute('data-status');
+        const type   = c.getAttribute('data-type');
+        let match = true;
+        if (id === 'now')     match = status === 'WIP';
+        if (id === 'future')  match = status === 'Soon' || status === 'One day';
+        if (id === 'gigs')    match = type === 'Freelance Gig';
+        if (id === 'jobs')    match = type === 'Job';
+        c.style.display = match ? '' : 'none';
+        if (match) shown++;
+      });
+      const counter = document.querySelector('[data-project-count]');
+      if (counter) counter.textContent = shown + ' / ' + count + ' projects';
+    }
+
+    tabs.forEach((t) => {
+      t.addEventListener('click', () => {
+        tabs.forEach((x) => x.classList.toggle('is-active', x === t));
+        applyFilter(t.dataset.filter);
+      });
+    });
+
+    applyFilter('now');
+  }
+</script>

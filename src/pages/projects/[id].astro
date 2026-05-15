@@ -1,0 +1,19 @@
+---
+import Layout from '../../components/Layout.astro';
+import ProjectDetail from '../../components/ProjectDetail.astro';
+import { getAllProjects } from '../../lib/projects';
+
+export async function getStaticPaths() {
+  const projects = await getAllProjects();
+  return projects.map(p => ({ params: { id: p.id }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+const { Content } = await project.render();
+---
+<Layout
+  title={`${project.data.title} — Even R Brekne`}
+  description={project.data.description ?? project.data.title}
+>
+  <ProjectDetail p={project} rendered={{ Content }} />
+</Layout>

@@ -1,0 +1,40 @@
+---
+import '../styles/global.css';
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title = 'Even R Brekne — Portfolio', description = 'IT-Konsulent · projects, jobs, builds' } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+    <!-- Restore color mode before first paint so we never flash the wrong theme -->
+    <script is:inline>
+      (function () {
+        try {
+          var m = localStorage.getItem('portfolio-mode') || 'light';
+          document.documentElement.dataset.mode = m;
+        } catch (_) {
+          document.documentElement.dataset.mode = 'light';
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div class="page theme-stone">
+      <div class="page-inner">
+        <slot />
+      </div>
+    </div>
+  </body>
+</html>

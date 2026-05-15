@@ -1,0 +1,46 @@
+---
+import ModeToggle from './ModeToggle.astro';
+interface Props {
+  name?: string;
+  handle?: string;
+  bio?: string;
+  links?: { label: string; href: string }[];
+  stats?: { label: string; value: string }[];
+}
+const {
+  name   = 'Even R Brekne',
+  handle = 'evenrbrekne / portfolio',
+  bio    = 'IT-Konsulent',
+  links  = [{ label: 'website ↗', href: '#' }],
+  stats  = [
+    { label: 'Projects',     value: '12'    },
+    { label: 'Shipped',      value: '06'    },
+    { label: 'WIP',          value: '04'    },
+    { label: 'Last commit',  value: '8h ago' },
+  ],
+} = Astro.props;
+---
+<header class="page-head tone-default">
+  <div class="ph-left">
+    <div class="ph-mark">
+      <span class="ph-glyph">◐</span>
+      <span class="ph-id mono">{handle}</span>
+    </div>
+    <h1 class="ph-name">{name}</h1>
+    <p class="ph-bio">{bio}</p>
+    <div class="ph-links mono">
+      {links.map(l => <a href={l.href}>{l.label}</a>)}
+    </div>
+  </div>
+  <div class="ph-right">
+    <dl class="ph-stats">
+      {stats.map(s => (
+        <div>
+          <dt>{s.label}</dt>
+          <dd class="mono">{s.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+  <ModeToggle />
+</header>

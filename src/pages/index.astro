@@ -1,0 +1,25 @@
+---
+import Layout       from '../components/Layout.astro';
+import PageHeader   from '../components/PageHeader.astro';
+import FilterBar    from '../components/FilterBar.astro';
+import BentoGrid    from '../components/BentoGrid.astro';
+import { getAllProjects } from '../lib/projects';
+
+const projects = await getAllProjects();
+const count = projects.length;
+
+// Set `?promote=1` to switch the bento to "2 hero cards". Otherwise all equal.
+const promote = Astro.url.searchParams.has('promote');
+---
+<Layout title="Even R Brekne — Portfolio" description="IT-Konsulent · projects, jobs, builds.">
+  <PageHeader />
+  <FilterBar count={count} />
+  <div class="page-section-head">
+    <div class="psh-left">
+      <span class="mono dim small">SECTION</span>
+      <h2 class="psh-title">In motion</h2>
+    </div>
+    <span class="mono dim small" data-project-count>{count} projects</span>
+  </div>
+  <BentoGrid projects={projects} promote={promote} />
+</Layout>

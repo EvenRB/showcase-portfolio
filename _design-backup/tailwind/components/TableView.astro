@@ -1,0 +1,75 @@
+---
+import { TAG_COLORS, STATUS_COLORS } from '../lib/tagColors'
+interface Project {
+  title: string; status: string; type: string; dateRange?: string
+  description?: string; tags: string[]; url?: string; employer?: string; emoji?: string
+}
+interface Props { projects: Project[] }
+const { projects } = Astro.props
+const groups = ['Freelance Gig', 'Job', 'Project'] as const
+const GROUP_BADGE: Record<string, string> = {
+  'Freelance Gig': 'bg-amber-100 text-amber-800',
+  'Job':           'bg-green-100 text-green-800',
+  'Project':       'bg-purple-100 text-purple-800',
+}
+---
+<div id="table-view" style="display:none">
+  {groups.map(group => {
+    const items = projects.filter(p => p.type === group)
+    if (!items.length) return null
+    return (
+      <section class="mb-6">
+        <div class="flex items-center gap-2 py-1.5 mb-0">
+          <span class={`text-xs px-2 py-0.5 rounded font-medium ${GROUP_BADGE[group]}`}>
+            {group}
+          </span>
+          <span class="text-xs text-gray-400">{items.length}</span>
+        </div>
+        <table class="w-full text-xs border-collapse">
+          <thead>
+            <tr class="border-b border-gray-200">
+              <th class="text-left py-1.5 px-2 text-gray-400 font-normal w-24">Status</th>
+              <th class="text-left py-1.5 px-2 text-gray-400 font-normal w-48">Name</th>
+              <th class="text-left py-1.5 px-2 text-gray-400 font-normal w-36">When</th>
+              <th class="text-left py-1.5 px-2 text-gray-400 font-normal">Description</th>
+              {group !== 'Project' && <th class="text-left py-1.5 px-2 text-gray-400 font-normal w-32">Employer</th>}
+              <th class="text-left py-1.5 px-2 text-gray-400 font-normal w-36">Tags</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map(p => {
+              const st = STATUS_COLORS[p.status] ?? STATUS_COLORS['Soon']
+              return (
+                <tr class="border-b border-gray-100 hover:bg-gray-50">
+                  <td class="py-1.5 px-2">
+                    <div class="flex items-center gap-1.5">
+                      <span class={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${st.dot}`}></span>
+                      <span class={`px-1.5 py-0.5 rounded text-[10px] font-medium ${st.badge}`}>{p.status}</span>
+                    </div>
+                  </td>
+                  <td class="py-1.5 px-2 font-medium text-gray-900">
+                    {p.emoji && <span class="mr-1">{p.emoji}</span>}
+                    {p.url
+                      ? <a href={p.url} target="_blank" rel="noopener" class="hover:underline">{p.title}</a>
+                      : p.title}
+                  </td>
+                  <td class="py-1.5 px-2 text-gray-400">{p.dateRange ?? '—'}</td>
+                  <td class="py-1.5 px-2 text-gray-500">{p.description ?? ''}</td>
+                  {group !== 'Project' && <td class="py-1.5 px-2 text-gray-400">{p.employer ?? ''}</td>}
+                  <td class="py-1.5 px-2">
+                    <div class="flex flex-wrap gap-1">
+                      {p.tags.map(tag => (
+                        <span class={`px-1.5 py-0.5 rounded text-[10px] font-medium
+                          ${TAG_COLORS[tag] ?? 'bg-gray-100 text-gray-600'}`}>{tag}</span>
+                      ))}
+                    </div>
+                  </td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </section>
+    )
+  })}
+</div>

@@ -1,0 +1,183 @@
+---
+import StatusPulse from './StatusPulse.astro';
+import LivePreview from './LivePreview.astro';
+import LangBar    from './LangBar.astro';
+import type { Project } from '../lib/projects';
+import { hostOf } from '../lib/projects';
+
+interface Props {
+  p: Project;
+  rendered?: { Content: any };  // rendered MD content
+}
+const { p, rendered } = Astro.props;
+const d  = p.data;
+const gh = p.gh;
+const Content = rendered?.Content;
+
+const tagClass = (t: string) => {
+  const k = t.toLowerCase();
+  if (k === 'app')        return 'dv-pill tag-app';
+  if (k === 'education')  return 'dv-pill tag-edu';
+  if (k === 'website')    return 'dv-pill tag-web';
+  if (k === 'data')       return 'dv-pill tag-data';
+  if (k === 'communications') return 'dv-pill tag-comms';
+  return 'dv-pill tag-default';
+};
+const typeClass = (t: string) => {
+  if (t === 'Project')        return 'dv-pill type-project';
+  if (t === 'Job')            return 'dv-pill type-job';
+  if (t === 'Freelance Gig')  return 'dv-pill type-freelance';
+  return 'dv-pill tag-default';
+};
+
+const repoUrl = d.repoUrl ?? (d.repo ? `https://github.com/${d.repo}` : '');
+---
+<div class="detail-v2">
+  <nav class="dv-crumb">
+    <a href="/" class="dim">portfolio</a>
+    <span class="sep">/</span>
+    <a href="/" class="dim">projects</a>
+    <span class="sep">/</span>
+    <span>{p.id}</span>
+  </nav>
+
+  {d.emoji && <div class="dv-icon">{d.emoji}</div>}
+  <h1 class="dv-title">{d.title}</h1>
+
+  <div class="dv-props">
+    <div class="dv-row">
+      <span class="dv-key"><span class="dv-key-glyph">◇</span><span>Tags</span></span>
+      <span class="dv-val">{d.tags.map(t => <span class={tagClass(t)}>{t}</span>)}</span>
+    </div>
+
+    <div class="dv-row">
+      <span class="dv-key"><span class="dv-key-glyph">≡</span><span>Description</span></span>
+      <span class={`dv-val ${!d.description ? 'empty' : ''}`}>{d.description ?? 'Empty'}</span>
+    </div>
+
+    <div class="dv-row">
+      <span class="dv-key"><span class="dv-key-glyph">▢</span><span>When</span></span>
+      <span class={`dv-val ${!d.dateRange ? 'empty' : ''}`}>{d.dateRange ?? 'Empty'}</span>
+    </div>
+
+    <div class="dv-row">
+      <span class="dv-key"><span class="dv-key-glyph">◌</span><span>Status</span></span>
+      <span class="dv-val">
+        <span class="dv-pill status">
+          <StatusPulse status={d.status} size={6} />
+          {d.status}
+        </span>
+      </span>
+    </div>
+
+    <div class="dv-row">
+      <span class="dv-key"><span class="dv-key-glyph">◉</span><span>Type</span></span>
+      <span class="dv-val"><span class={typeClass(d.type)}>{d.type}</span></span>
+    </div>
+
+    <div class="dv-row">
+      <span class="dv-key"><span class="dv-key-glyph">◔</span><span>Employer</span></span>
+      <span class={`dv-val ${!d.employer ? 'empty' : ''}`}>{d.employer ?? 'Empty'}</span>
+    </div>
+
+    <div class="dv-row">
+      <span class="dv-key"><span class="dv-key-glyph">↗</span><span>Live URL</span></span>
+      <span class={`dv-val ${!d.url ? 'empty' : ''}`}>
+        {d.url ? <a href={d.url} target="_blank" rel="noopener">{hostOf(d.url)}</a> : 'Empty'}
+      </span>
+    </div>
+
+    <div class="dv-row">
+      <span class="dv-key"><span class="dv-key-glyph">◧</span><span>Repository</span></span>
+      <span class={`dv-val ${!repoUrl ? 'empty' : ''}`}>
+        {repoUrl ? <a href={repoUrl} target="_blank" rel="noopener">{hostOf(repoUrl)}</a> : 'Empty'}
+      </span>
+    </div>
+
+    {gh && (
+      <details class="dv-more-wrap" open={false}>
+        <summary class="dv-more">
+          <span>∨</span>
+          <span>4 more properties</span>
+        </summary>
+
+        <div class="dv-row">
+          <span class="dv-key"><span class="dv-key-glyph">★</span><span>Stars</span></span>
+          <span class="dv-val mono">{gh.stars}</span>
+        </div>
+        <div class="dv-row">
+          <span class="dv-key"><span class="dv-key-glyph">⑂</span><span>Forks</span></span>
+          <span class="dv-val mono">{gh.forks}</span>
+        </div>
+        <div class="dv-row">
+          <span class="dv-key"><span class="dv-key-glyph">◆</span><span>Languages</span></span>
+          <span class="dv-val">
+            <span class="lang-list" style="gap: 14px">
+              {gh.languages.map(l => (
+                <span class="lang-list-item">
+                  <span class="lang-dot" style={`background: ${l.color}`}></span>
+                  <span class="lang-name">{l.name}</span>
+                  <span class="mono dim small" style="margin-left: 4px">{l.pct}%</span>
+                </span>
+              ))}
+            </span>
+          </span>
+        </div>
+        <div class="dv-row">
+          <span class="dv-key"><span class="dv-key-glyph">⌖</span><span>Last commit</span></span>
+          <span class="dv-val">
+            <span class="mono">{gh.commit}</span>
+            <span class="mono dim small" style="margin-left: 8px">· {gh.updatedAtLabel}</span>
+          </span>
+        </div>
+      </details>
+    )}
+  </div>
+
+  <div class="dv-divider"></div>
+
+  <section class="dv-embed">
+    <div class="dv-embed-head">
+      <span class="dv-embed-mark">{d.emoji ?? '◐'}</span>
+      <span class="mono">{d.title} — Live</span>
+      {d.url && <span class="dv-embed-host mono">{hostOf(d.url)}</span>}
+    </div>
+    <div class="dv-embed-slot">
+      <LivePreview
+        liveUrl={d.url}
+        repoUrl={repoUrl}
+        mood={d.previewMood}
+        base={d.previewBase ?? '#1a1a1a'}
+        accent={d.previewAccent ?? '#888'}
+        ratio="16 / 9"
+        title={d.title}
+        id={p.id}
+      />
+    </div>
+  </section>
+
+  {gh && gh.languages.length > 0 && (
+    <section class="dv-langstrip">
+      <div class="dv-langstrip-head">
+        <span>Language distribution</span>
+        <span>{gh.languages.length} tracked</span>
+      </div>
+      <LangBar langs={gh.languages} height={3} />
+      <div class="dv-langstrip-list">
+        {gh.languages.map(l => (
+          <span class="dv-langstrip-item">
+            <span class="lang-dot" style={`background: ${l.color}`}></span>
+            <span class="mono">{l.name}</span>
+            <span class="mono dim small">{l.pct}%</span>
+          </span>
+        ))}
+      </div>
+    </section>
+  )}
+
+  {Content && (
+    <section class="dv-prose">
+      <Content />
+    </section>
+  )}
+</div>

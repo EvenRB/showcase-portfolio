@@ -1,0 +1,44 @@
+---
+import { getCollection } from 'astro:content'
+import Layout from '../components/Layout.astro'
+import ProjectCard from '../components/ProjectCard.astro'
+import FilterBar from '../components/FilterBar.astro'
+import TableView from '../components/TableView.astro'
+
+const allProjects = await getCollection('projects')
+const sorted = allProjects.sort((a, b) =>
+  (b.data.dateRange ?? '').localeCompare(a.data.dateRange ?? ''))
+
+const tableProjects = sorted.map(p => ({ ...p.data }))
+---
+<Layout title="Product Portfolio">
+  <div class="mb-4">
+    <h1 class="text-xl font-semibold flex items-center gap-2 mb-1">
+      🗂️ Product Portfolio
+    </h1>
+    <p class="text-xs text-gray-400 space-x-2">
+      <span>◆ Website</span><span>◆ Twitter</span><span>◆ CV</span><span>◆ Blog</span>
+    </p>
+  </div>
+
+  <FilterBar />
+
+  <div id="gallery-view"
+       class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
+    {sorted.map(p => (
+      <div class="project-card" data-status={p.data.status}>
+        <ProjectCard
+          title={p.data.title}
+          status={p.data.status}
+          dateRange={p.data.dateRange}
+          tags={p.data.tags}
+          image={p.data.image}
+          emoji={p.data.emoji}
+          url={p.data.url}
+        />
+      </div>
+    ))}
+  </div>
+
+  <TableView projects={tableProjects} />
+</Layout>
