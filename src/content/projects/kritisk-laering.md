@@ -7,6 +7,7 @@ dateRange: "Mai 2026"
 tags: ["Education", "App"]
 description: "Interaktivt nettverktøy som lærer folk å tenke kritisk om KI-svar — ikke ved å forklare, men ved å la dem oppleve forskjellen selv."
 url: "https://knyttneven.github.io/kritisk-laering/"
+screenshotUrl: "https://knyttneven.github.io/kritisk-laering/?v=1"
 repo: "knyttneven/kritisk-laering"
 featured: false
 previewBase: "#1e1b4b"

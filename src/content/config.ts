@@ -11,6 +11,7 @@ const projects = defineCollection({
     tags:        z.array(z.string()).default([]),
     description: z.string().optional(),
     url:         z.string().url().optional(),     // live URL (deployed site)
+    screenshotUrl: z.string().url().optional(), // overrides url for microlink screenshot
     repo:        z.string().optional(),           // owner/repo  — drives GH stats
     repoUrl:     z.string().url().optional(),     // overrides if not on github
     employer:    z.string().optional(),
