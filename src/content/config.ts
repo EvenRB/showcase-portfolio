@@ -20,7 +20,7 @@ const projects = defineCollection({
     previewBase:   z.string().optional(),         // hex bg
     previewAccent: z.string().optional(),         // hex accent
     previewMood:   z.enum([
-      'editor','voice','map','graph','list','doc','cli','table','dashboard','reader','system','cms','default'
+      'editor','voice','map','graph','list','doc','cli','table','dashboard','reader','system','cms','compare','default'
     ]).default('default'),
   }),
 });

@@ -20,7 +20,14 @@ const lang0 = gh?.languages?.[0];
   data-tags={d.tags.join(',')}>
   <a class="card-link" href={`/projects/${p.id}/`}>
     <div class="cd-preview">
-      <CardCover image={d.image} liveUrl={d.url} title={d.title} />
+      <CardCover
+        image={d.image}
+        liveUrl={d.url}
+        title={d.title}
+        previewMood={d.previewMood}
+        previewBase={d.previewBase}
+        previewAccent={d.previewAccent}
+      />
     </div>
     <div class="cd-body">
       <h3 class="cd-title">
@@ -53,10 +60,11 @@ const lang0 = gh?.languages?.[0];
       href={d.url}
       target="_blank"
       rel="noopener noreferrer"
-      class="cd-visit mono"
+      class="cd-visit-bar mono"
       onclick="event.stopPropagation()"
     >
-      Visit ↗
+      <span>Visit project</span>
+      <span class="cd-visit-arrow">↗</span>
     </a>
   )}
 </article>

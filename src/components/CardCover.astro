@@ -1,27 +1,28 @@
 ---
+import PreviewArt from './PreviewArt.astro';
+
 interface Props {
   image?: string;
   liveUrl?: string;
   title: string;
+  previewMood?: string;
+  previewBase?: string;
+  previewAccent?: string;
 }
-const { image, liveUrl, title } = Astro.props;
+const { image, liveUrl, title, previewMood, previewBase = '#1a1a1a', previewAccent = '#888' } = Astro.props;
 
 const initials = title
   .split(/\s+/)
   .slice(0, 2)
   .map(w => w[0]?.toUpperCase() ?? '')
   .join('');
-
-const screenshotUrl = liveUrl
-  ? `https://api.microlink.io/?url=${encodeURIComponent(liveUrl)}&screenshot=true&meta=false&embed=screenshot.url`
-  : null;
 ---
 
 <div class="cc-wrap">
   {image ? (
     <img class="cc-img" src={image} alt={title} loading="lazy" />
-  ) : screenshotUrl ? (
-    <img class="cc-img" src={screenshotUrl} alt={`${title} preview`} loading="lazy" />
+  ) : (previewMood && previewMood !== 'default') ? (
+    <PreviewArt mood={previewMood} base={previewBase} accent={previewAccent} />
   ) : (
     <div class="cc-placeholder">
       <span class="cc-initials">{initials}</span>
