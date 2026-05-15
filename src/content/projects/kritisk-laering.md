@@ -9,9 +9,9 @@ description: "Interaktivt nettverktøy som lærer folk å tenke kritisk om KI-sv
 url: "https://knyttneven.github.io/kritisk-laering/"
 repo: "knyttneven/kritisk-laering"
 featured: false
-previewBase: "#0f1520"
-previewAccent: "#818cf8"
-previewMood: reader
+previewBase: "#1e1b4b"
+previewAccent: "#34d399"
+previewMood: compare
 ---
 
 Målgruppe: lærere og pedagoger. Kjernen er aha-øyeblikket — brukeren opplever selv hvordan KI-svar endres radikalt basert på konteksten de gir. Ingen forklaring først. Bare opplevelsen.

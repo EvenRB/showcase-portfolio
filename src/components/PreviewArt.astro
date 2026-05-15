@@ -182,6 +182,25 @@ const { mood = 'default', base = '#1a1a1a', accent = '#888' } = Astro.props;
   </div>
 )}
 
+{mood === 'compare' && (
+  <div class="pa pa-compare" style={`background: ${base}`}>
+    <div class="pa-compare-label" style={`color: rgba(255,255,255,0.35)`}>«spørsmål til KI»</div>
+    <div class="pa-compare-row">
+      <div class="pa-compare-card muted">
+        {Array.from({length: 5}).map((_, i) => (
+          <span class="pa-compare-line" style={`width: ${55 + (i*17)%38}%`}></span>
+        ))}
+      </div>
+      <div class="pa-compare-card accent" style={`border-color: ${accent}; background: ${accent}18`}>
+        <span class="pa-compare-dot" style={`background: ${accent}`}></span>
+        {Array.from({length: 5}).map((_, i) => (
+          <span class="pa-compare-line bright" style={`width: ${50 + (i*13)%42}%`}></span>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
+
 {(!mood || mood === 'default') && (
   <div class="pa pa-default" style={`background: ${base}`}></div>
 )}

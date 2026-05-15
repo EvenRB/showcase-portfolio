@@ -48,4 +48,15 @@ const lang0 = gh?.languages?.[0];
       )}
     </div>
   </a>
+  {d.url && (
+    <a
+      href={d.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="cd-visit mono"
+      onclick="event.stopPropagation()"
+    >
+      Visit ↗
+    </a>
+  )}
 </article>

@@ -1407,6 +1407,33 @@ html, body, #root {
 .cd-lang { display: inline-flex; align-items: center; gap: 5px; }
 .cd-stars { color: var(--ink-3); }
 .cd-commit { margin-left: auto; }
+.cd-visit {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  padding: 3px 8px;
+  border-radius: 5px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink-3);
+  text-decoration: none;
+  transition: border-color .15s, color .15s;
+  opacity: 0;
+  pointer-events: none;
+}
+.card:hover .cd-visit {
+  opacity: 1;
+  pointer-events: auto;
+}
+.cd-visit:hover {
+  border-color: var(--ink);
+  color: var(--ink);
+}
 
 /* Hover lift / shared */
 :root[data-hover="lift"]   .card.cd:hover { transform: translateY(-2px); border-color: var(--ink-3); }
@@ -1668,6 +1695,18 @@ html, body, #root {
   height: 4px;
   opacity: 0.5;
 }
+
+/* Compare */
+.pa-compare { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
+.pa-compare-label { font-size: 9px; text-align: center; letter-spacing: 0.04em; font-style: italic; }
+.pa-compare-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex: 1; }
+.pa-compare-card { border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 5px; position: relative; }
+.pa-compare-card.muted { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); }
+.pa-compare-card.accent { border: 1.5px solid; }
+.pa-compare-dot { position: absolute; top: 8px; right: 8px; width: 6px; height: 6px; border-radius: 50%; }
+.pa-compare-line { height: 3px; border-radius: 2px; display: block; }
+.pa-compare-line { background: rgba(255,255,255,0.15); }
+.pa-compare-line.bright { background: rgba(255,255,255,0.35); }
 
 /* System */
 .pa-system { padding: 14px; }
