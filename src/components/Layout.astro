@@ -31,10 +31,46 @@ const { title = 'Even R Brekne — Portfolio', description = 'IT-Konsulent · pr
     </script>
   </head>
   <body>
+    <div id="vanta-bg" aria-hidden="true"></div>
     <div class="page theme-stone">
       <div class="page-inner">
         <slot />
       </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@0.5.24/dist/vanta.clouds2.min.js"></script>
+    <script is:inline>
+    (function () {
+      var MODES = {
+        light: { backgroundColor: 0xFAF8F4, skyColor: 0xC2D0E8, cloudColor: 0xE5DDD0, lightColor: 0xFFFFFF, speed: 0.30, backgroundAlpha: 1 },
+        dark:  { backgroundColor: 0x14110C, skyColor: 0x1E1A14, cloudColor: 0x2E2820, lightColor: 0x4A4036, speed: 0.20, backgroundAlpha: 1 },
+        navy:  { backgroundColor: 0x0E1828, skyColor: 0x121E30, cloudColor: 0x1A2E4A, lightColor: 0x4A7AB8, speed: 0.25, backgroundAlpha: 1 },
+      };
+      var effect = null;
+      function getMode() { return document.documentElement.dataset.mode || 'light'; }
+      function initOrUpdate() {
+        if (!window.VANTA || !window.VANTA.CLOUDS2) return;
+        var cfg = MODES[getMode()] || MODES.light;
+        if (effect) { effect.setOptions(cfg); }
+        else {
+          effect = window.VANTA.CLOUDS2({
+            el: '#vanta-bg',
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200,
+            minWidth: 200,
+            scale: 1.0,
+            scaleMobile: 1.0,
+            ...cfg,
+          });
+        }
+      }
+      window.addEventListener('load', initOrUpdate);
+      new MutationObserver(function (ms) {
+        ms.forEach(function (m) { if (m.attributeName === 'data-mode') initOrUpdate(); });
+      }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-mode'] });
+    })();
+    </script>
   </body>
 </html>
