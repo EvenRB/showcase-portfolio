@@ -441,6 +441,32 @@ html, body, #root {
 .bento-cell { display: flex; min-width: 0; }
 .bento-cell > .card { width: 100%; }
 
+/* ── Table view ── */
+.bento[data-view="table"] {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--line);
+}
+.bento[data-view="table"] .bento-cell,
+.bento[data-view="table"] .bento-cell.span-lg,
+.bento[data-view="table"] .bento-cell.span-sm {
+  width: 100%;
+  grid-column: unset;
+  border-bottom: 1px solid var(--line);
+}
+.bento[data-view="table"] .bento-cell:last-child { border-bottom: none; }
+.bento[data-view="table"] .card.cd             { flex-direction: row; border: none; }
+.bento[data-view="table"] .cd-preview          { display: none; }
+.bento[data-view="table"] .cd-body             {
+  display: flex; flex-direction: row; align-items: center;
+  padding: 10px 16px; gap: 20px; width: 100%;
+}
+.bento[data-view="table"] .cd-title            { min-width: 180px; font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bento[data-view="table"] .cd-date             { margin: 0; white-space: nowrap; }
+.bento[data-view="table"] .cd-foot             { margin: 0; flex: 1; flex-wrap: nowrap; }
+.bento[data-view="table"] .cd-techline         { margin: 0; padding: 0; border: none; }
+
 /* ─────────────────────────────────────────────────────────────────
    Base card shell — shared transitions
    ───────────────────────────────────────────────────────────────── */

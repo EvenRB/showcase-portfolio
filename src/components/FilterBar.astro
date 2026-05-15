@@ -65,5 +65,14 @@ const tabs = [
     });
 
     applyFilter('now');
+
+    const viewBtns = root.querySelectorAll('[data-view]');
+    const bento = document.querySelector('.bento');
+    viewBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        viewBtns.forEach((b) => b.classList.toggle('is-active', b === btn));
+        if (bento) bento.setAttribute('data-view', btn.dataset.view);
+      });
+    });
   }
 </script>
