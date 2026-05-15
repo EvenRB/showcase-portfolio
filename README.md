@@ -1,57 +1,55 @@
-# Even R Brekne — Portfolio (Astro starter)
+# Even R Brekne — Portfolio
 
-Static portfolio site. Reads project content from local Markdown files,
-fetches live GitHub stats at build time, deploys as static HTML to Vercel.
+**Live:** [evenrb.vercel.app](https://evenrb.vercel.app)
+
+Static portfolio site built with Astro. Project content lives in Markdown files, GitHub stats are fetched at build time, deployed as static HTML to Vercel.
 
 ## Stack
-- **Astro 4.x** · static output (no SSR adapter needed)
-- **TypeScript** strict
-- **Plain CSS** with CSS custom properties (no Tailwind — see HANDOFF.md)
-- **No client framework** — vanilla JS in `<script>` blocks for the bits that move
 
-## Quickstart
+- **Astro 4.x** — static output, no SSR adapter
+- **TypeScript** strict mode
+- **Plain CSS** with CSS custom properties and three color modes (light / dark / navy)
+- **No client framework** — vanilla JS only for interactive bits
+
+## Local development
+
 ```bash
 npm install
 npm run dev
 ```
-Open `http://localhost:4321`.
 
-To pull live GitHub stats, set a token in `.env`:
+## GitHub stats (optional)
+
+To pull live star counts, languages, and commit info at build time, add a GitHub personal access token to `.env`:
+
 ```
-PUBLIC_GITHUB_TOKEN=ghp_xxxxxxxx
+PUBLIC_GITHUB_TOKEN=your_token_here
 ```
-(read-only public scope is enough — the build only reads public repo metadata.)
+
+Requires only `public_repo` (read-only) scope. Without it the build succeeds but GitHub stats fields will be empty.
+
+For Vercel: add `PUBLIC_GITHUB_TOKEN` under **Project Settings → Environment Variables**.
 
 ## Add a project
-Drop a Markdown file into `src/content/projects/`. Frontmatter shape:
+
+Drop a Markdown file into `src/content/projects/`. Minimal frontmatter:
 
 ```yaml
 ---
-title: "Fishbowl"
-emoji: "◇"
+title: "Project name"
 type: Project              # Project | Job | Freelance Gig
 status: WIP                # WIP | Shipped | RIP | Soon | One day
-dateRange: "Nov 2025 → ongoing"
-tags: ["App", "Communications"]
-description: "Async voice notes between teams in flow state."
-url: "https://fishbowl.example.com"     # live URL (deployed)
-repo: "evenrbrekne/fishbowl"             # owner/repo → drives GH stats
-featured: true                            # max 2 ever — promotes to hero card
-previewMood: voice                        # visual mood for the placeholder
-previewBase: "#0f172a"
-previewAccent: "#22D3EE"
+tags: ["App"]
+description: "One-line summary."
+url: "https://your-live-site.com"
+repo: "knyttneven/repo-name"
+featured: false
+previewMood: default
 ---
-Markdown body shows on the project detail page.
 ```
 
-`previewMood` is one of: `editor · voice · map · graph · list · doc · cli · table · dashboard · reader · system · cms · default`.
+`previewMood` options: `editor · voice · map · graph · list · doc · cli · table · dashboard · reader · system · cms · default`
 
-## Deploy to Vercel
-```bash
-vercel
-```
-Vercel auto-detects Astro and builds with `npm run build`, serving `/dist`.
-Set `PUBLIC_GITHUB_TOKEN` in the Vercel project's environment variables so
-build-time GitHub fetches lift past the unauthenticated rate limit.
+## Agents
 
-See HANDOFF.md for how this folder maps to the broader project plan.
+See [`AGENTS.md`](./AGENTS.md) for the agent definitions that govern how AI assistants should work in this codebase.
