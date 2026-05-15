@@ -1,0 +1,30 @@
+---
+interface Props {
+  image?: string;
+  liveUrl?: string;
+  title: string;
+}
+const { image, liveUrl, title } = Astro.props;
+
+const initials = title
+  .split(/\s+/)
+  .slice(0, 2)
+  .map(w => w[0]?.toUpperCase() ?? '')
+  .join('');
+
+const screenshotUrl = liveUrl
+  ? `https://api.microlink.io/?url=${encodeURIComponent(liveUrl)}&screenshot=true&meta=false&embed=screenshot.url`
+  : null;
+---
+
+<div class="cc-wrap">
+  {image ? (
+    <img class="cc-img" src={image} alt={title} loading="lazy" />
+  ) : screenshotUrl ? (
+    <img class="cc-img" src={screenshotUrl} alt={`${title} preview`} loading="lazy" />
+  ) : (
+    <div class="cc-placeholder">
+      <span class="cc-initials">{initials}</span>
+    </div>
+  )}
+</div>

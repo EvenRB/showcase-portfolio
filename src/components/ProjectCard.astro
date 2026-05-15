@@ -1,6 +1,6 @@
 ---
 import StatusPulse from './StatusPulse.astro';
-import LivePreview from './LivePreview.astro';
+import CardCover from './CardCover.astro';
 import type { Project } from '../lib/projects';
 
 interface Props {
@@ -10,7 +10,6 @@ interface Props {
 const { p, span = 'sm' } = Astro.props;
 const d = p.data;
 const gh = p.gh;
-const ratio = span === 'lg' ? '16 / 9' : '4 / 3';
 
 const lang0 = gh?.languages?.[0];
 ---
@@ -21,16 +20,7 @@ const lang0 = gh?.languages?.[0];
   data-tags={d.tags.join(',')}>
   <a class="card-link" href={`/projects/${p.id}/`}>
     <div class="cd-preview">
-      <LivePreview
-        liveUrl={d.url}
-        repoUrl={d.repoUrl ?? (d.repo ? `https://github.com/${d.repo}` : undefined)}
-        mood={d.previewMood}
-        base={d.previewBase ?? '#1a1a1a'}
-        accent={d.previewAccent ?? '#888'}
-        ratio={ratio}
-        title={d.title}
-        id={p.id}
-      />
+      <CardCover image={d.image} liveUrl={d.url} title={d.title} />
     </div>
     <div class="cd-body">
       <h3 class="cd-title">
