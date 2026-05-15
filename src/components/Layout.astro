@@ -76,15 +76,9 @@ const { title = 'Even R Brekne — Portfolio', description = 'IT-Konsulent · pr
         s.onload = cb;
         document.head.appendChild(s);
       }
-      loadScript(
-        'https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js',
-        function () {
-          loadScript(
-            'https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds2.min.js',
-            initOrUpdate
-          );
-        }
-      );
+      loadScript('/three.r134.min.js', function () {
+        loadScript('/vanta.clouds2.min.js', initOrUpdate);
+      });
       new MutationObserver(function (ms) {
         ms.forEach(function (m) { if (m.attributeName === 'data-mode') initOrUpdate(); });
       }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-mode'] });
