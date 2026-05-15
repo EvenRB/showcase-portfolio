@@ -2,11 +2,11 @@
 title: "Kritisk læring"
 emoji: "🧠"
 type: Project
-status: WIP
-dateRange: "Mai 2026 → ongoing"
+status: Shipped
+dateRange: "Mai 2026"
 tags: ["Education", "App"]
 description: "Interaktivt nettverktøy som lærer folk å tenke kritisk om KI-svar — ikke ved å forklare, men ved å la dem oppleve forskjellen selv."
-url: "https://kritisk-laering.vercel.app"
+url: "https://knyttneven.github.io/kritisk-laering/"
 repo: "knyttneven/kritisk-laering"
 featured: false
 previewBase: "#0f1520"
