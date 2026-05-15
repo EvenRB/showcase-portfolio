@@ -1318,6 +1318,19 @@ html, body, #root {
   object-fit: cover;
   display: block;
 }
+.cc-screenshot-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.cc-art-bg {
+  position: absolute;
+  inset: 0;
+}
+.cc-screenshot {
+  position: absolute;
+  inset: 0;
+}
 .cc-placeholder {
   width: 100%;
   height: 100%;
@@ -1410,22 +1423,32 @@ html, body, #root {
 .cd-visit-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 8px 14px;
-  border-top: 1px solid var(--line);
-  font-size: 10.5px;
-  color: var(--ink-3);
+  justify-content: center;
+  gap: 6px;
+  margin: 0 14px 12px;
+  padding: 7px 12px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: var(--bg-2, var(--muted, #f4f4f5));
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-2, var(--ink));
   text-decoration: none;
-  transition: background .15s, color .15s;
+  transition: background .15s, border-color .15s, color .15s, transform .1s;
   letter-spacing: 0.01em;
 }
 .cd-visit-bar:hover {
-  background: var(--line);
-  color: var(--ink);
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--bg);
+  transform: translateY(-1px);
 }
 .cd-visit-arrow {
-  font-size: 11px;
-  opacity: 0.6;
+  font-size: 12px;
+  transition: transform .15s;
+}
+.cd-visit-bar:hover .cd-visit-arrow {
+  transform: translate(2px, -2px);
 }
 
 /* Hover lift / shared */

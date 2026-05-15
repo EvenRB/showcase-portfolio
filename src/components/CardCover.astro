@@ -16,13 +16,27 @@ const initials = title
   .slice(0, 2)
   .map(w => w[0]?.toUpperCase() ?? '')
   .join('');
+
+const screenshotUrl = liveUrl
+  ? `https://api.microlink.io/?url=${encodeURIComponent(liveUrl)}&screenshot=true&meta=false&embed=screenshot.url`
+  : null;
 ---
 
 <div class="cc-wrap">
   {image ? (
     <img class="cc-img" src={image} alt={title} loading="lazy" />
-  ) : (previewMood && previewMood !== 'default') ? (
-    <PreviewArt mood={previewMood} base={previewBase} accent={previewAccent} />
+  ) : screenshotUrl ? (
+    <div class="cc-screenshot-wrap">
+      <div class="cc-art-bg">
+        <PreviewArt mood={previewMood || 'default'} base={previewBase} accent={previewAccent} />
+      </div>
+      <img
+        class="cc-img cc-screenshot"
+        src={screenshotUrl}
+        alt={`${title} preview`}
+        loading="lazy"
+      />
+    </div>
   ) : (
     <div class="cc-placeholder">
       <span class="cc-initials">{initials}</span>
