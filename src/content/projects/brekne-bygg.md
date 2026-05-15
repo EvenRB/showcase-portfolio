@@ -2,10 +2,11 @@
 title: "Brekne Bygg AS"
 emoji: "🏗️"
 type: Freelance Gig
-status: WIP
+status: Shipped
 dateRange: "Mai 2026 → ongoing"
 tags: ["Website", "Branding"]
 description: "Hjemmeside for S.Brekne Bygg AS."
+url: "https://lovable.dev/projects/1e6a84da-e313-4c86-9f27-55805b4be32a"
 employer: "S.Brekne Bygg"
 featured: false
 previewBase: "#1a1208"
