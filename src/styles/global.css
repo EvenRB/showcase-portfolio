@@ -43,7 +43,7 @@
 
 html, body, #root {
   margin: 0;
-  background: #1c1a17; /* canvas surround */
+  background: transparent;
   font-family: var(--font-sans);
   color: var(--ink);
   -webkit-font-smoothing: antialiased;
@@ -2038,7 +2038,12 @@ html, body, #root {
 #vanta-bg {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
 }
 
 .page.theme-stone                    { background: rgba(250, 248, 244, 0.88); }
