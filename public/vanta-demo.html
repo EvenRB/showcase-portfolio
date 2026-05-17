@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vanta Demo — WAVES vs NET</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { overflow: hidden; font-family: 'Inter', sans-serif; }
+
+    #vanta-bg { position: fixed; inset: 0; z-index: 0; }
+
+    .page {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+
+    /* ── Header (same as PageHeader.astro) ── */
+    .page-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 2rem 2.5rem;
+      border-bottom: 1px solid var(--line, rgba(0,0,0,0.12));
+    }
+    .ph-left { display: flex; flex-direction: column; gap: 0.3rem; }
+    .ph-mark {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--ink-faint);
+      letter-spacing: 0.04em;
+    }
+    .ph-glyph { font-size: 1rem; color: var(--ink-mid); }
+    .ph-name {
+      font-size: 2rem; font-weight: 700;
+      letter-spacing: -0.04em; color: var(--ink); line-height: 1.1;
+    }
+    .ph-bio  { font-size: 0.85rem; color: var(--ink-mid); }
+    .ph-links {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem; color: var(--ink-faint);
+    }
+    .ph-stats { display: flex; gap: 1.5rem; }
+    .ph-stats div { display: flex; flex-direction: column; gap: 0.15rem; }
+    .ph-stats dt {
+      font-size: 0.65rem; color: var(--ink-faint);
+      text-transform: uppercase; letter-spacing: 0.08em;
+    }
+    .ph-stats dd {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem; font-weight: 500; color: var(--ink);
+    }
+
+    /* ── Switcher ── */
+    .switcher {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 0.5rem; align-items: center;
+      background: var(--card-bg, rgba(255,255,255,0.6));
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 0.5rem 0.75rem;
+      backdrop-filter: blur(8px);
+      z-index: 20;
+    }
+    .switcher span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.08em;
+      color: var(--ink-mid);
+      margin-right: 0.25rem;
+    }
+    .sw-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem; font-weight: 500;
+      padding: 0.3rem 0.8rem;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      cursor: pointer;
+      background: transparent;
+      color: var(--ink-mid);
+      transition: background 0.15s, color 0.15s;
+    }
+    .sw-btn.active {
+      background: var(--ink);
+      color: var(--bg);
+      border-color: var(--ink);
+    }
+    .sw-btn:hover:not(.active) { background: var(--line); }
+
+    .mode-row {
+      position: fixed; top: 1rem; right: 1.5rem;
+      display: flex; gap: 0.4rem; z-index: 20;
+    }
+    .mode-btn {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem; padding: 0.25rem 0.6rem;
+      border: 1px solid var(--line); border-radius: 3px;
+      cursor: pointer; background: transparent;
+      color: var(--ink-mid); transition: background 0.15s;
+    }
+    .mode-btn:hover { background: var(--line); }
+    .mode-btn.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+    /* ── Fake cards ── */
+    .cards {
+      position: fixed; bottom: 5.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 1rem;
+    }
+    .card {
+      width: 200px; height: 120px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--card-bg);
+      backdrop-filter: blur(8px);
+      padding: 1rem;
+    }
+    .card-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--ink-faint);
+    }
+    .card-title { font-size: 0.9rem; font-weight: 600; color: var(--ink); margin-top: 0.35rem; }
+    .card-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      margin-top: 0.6rem;
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+    /* ── Color modes ── */
+    :root, [data-mode="light"] {
+      --bg: #F5ECD7;
+      --ink: #2A2118;
+      --ink-mid: #7A6A58;
+      --ink-faint: #B0A090;
+      --line: rgba(42,33,24,0.12);
+      --card-bg: rgba(245,236,215,0.55);
+    }
+    [data-mode="dark"] {
+      --bg: #1A1510;
+      --ink: #EDE0CC;
+      --ink-mid: #8A7A68;
+      --ink-faint: #5A4A38;
+      --line: rgba(237,224,204,0.1);
+      --card-bg: rgba(26,21,16,0.55);
+    }
+    [data-mode="navy"] {
+      --bg: #050D1A;
+      --ink: #C8D8F0;
+      --ink-mid: #6888B0;
+      --ink-faint: #304860;
+      --line: rgba(200,216,240,0.1);
+      --card-bg: rgba(5,13,26,0.55);
+    }
+  </style>
+</head>
+<body data-mode="light">
+  <div id="vanta-bg"></div>
+  <div class="page">
+    <header class="page-head">
+      <div class="ph-left">
+        <div class="ph-mark"><span class="ph-glyph">◐</span> evenrbrekne / portfolio</div>
+        <h1 class="ph-name">Even R Brekne</h1>
+        <p class="ph-bio">IT-Konsulent</p>
+        <div class="ph-links">website ↗</div>
+      </div>
+      <dl class="ph-stats">
+        <div><dt>Projects</dt><dd>12</dd></div>
+        <div><dt>Shipped</dt><dd>06</dd></div>
+        <div><dt>WIP</dt><dd>04</dd></div>
+        <div><dt>Last commit</dt><dd>8h ago</dd></div>
+      </dl>
+    </header>
+  </div>
+
+  <!-- Mode switcher -->
+  <div class="mode-row">
+    <button class="mode-btn active" data-m="light">light</button>
+    <button class="mode-btn" data-m="dark">dark</button>
+    <button class="mode-btn" data-m="navy">navy</button>
+  </div>
+
+  <!-- Fake cards -->
+  <div class="cards">
+    <div class="card">
+      <div class="card-tag">App · WIP</div>
+      <div class="card-title">Kritisk Læring</div>
+      <div class="card-dot" style="background:#4ade80;box-shadow:0 0 5px #4ade80"></div>
+    </div>
+    <div class="card">
+      <div class="card-tag">Website · Shipped</div>
+      <div class="card-title">Portfolio v2</div>
+      <div class="card-dot" style="background:#60a5fa;box-shadow:0 0 5px #60a5fa"></div>
+    </div>
+  </div>
+
+  <!-- Effect switcher -->
+  <div class="switcher">
+    <span>EFFEKT:</span>
+    <button class="sw-btn active" id="btn-clouds2">CLOUDS2 (nå)</button>
+    <button class="sw-btn" id="btn-waves">WAVES</button>
+    <button class="sw-btn" id="btn-net">NET</button>
+    <button class="sw-btn" id="btn-fog">FOG</button>
+  </div>
+
+  <script src="/three.r134.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.fog.min.js"></script>
+
+  <script>
+  (function () {
+    const MODES = {
+      light: {
+        clouds2: { backgroundColor:0xF5ECD7, skyColor:0xC4A882, cloudColor:0xFFF8EC, lightColor:0xFFFFFF, speed:0.5 },
+        waves:   { color:0xB09070, shininess:30, waveHeight:15, waveSpeed:0.5, zoom:0.9 },
+        net:     { color:0x8A6A48, backgroundColor:0xF5ECD7, points:12, maxDistance:20, spacing:18 },
+        fog:     { highlightColor:0xD4A870, midtoneColor:0xC49060, lowlightColor:0xF5ECD7, baseColor:0xF0E8D8, blurFactor:0.6, speed:1, zoom:0.9 },
+      },
+      dark: {
+        clouds2: { backgroundColor:0x1A1510, skyColor:0x2A2010, cloudColor:0x3A3020, lightColor:0x806040, speed:0.3 },
+        waves:   { color:0x2A2010, shininess:20, waveHeight:18, waveSpeed:0.4, zoom:0.9 },
+        net:     { color:0x6A5038, backgroundColor:0x1A1510, points:12, maxDistance:20, spacing:18 },
+        fog:     { highlightColor:0x4A3020, midtoneColor:0x2A1810, lowlightColor:0x1A1510, baseColor:0x100C08, blurFactor:0.7, speed:0.8, zoom:0.9 },
+      },
+      navy: {
+        clouds2: { backgroundColor:0x050D1A, skyColor:0x0A1E38, cloudColor:0x1A3A60, lightColor:0x4A80B8, speed:0.4 },
+        waves:   { color:0x0A1E38, shininess:40, waveHeight:20, waveSpeed:0.45, zoom:0.9 },
+        net:     { color:0x304870, backgroundColor:0x050D1A, points:12, maxDistance:20, spacing:18 },
+        fog:     { highlightColor:0x1A4880, midtoneColor:0x0A2848, lowlightColor:0x050D1A, baseColor:0x030810, blurFactor:0.6, speed:0.9, zoom:0.9 },
+      },
+    };
+
+    const VANTA_KEYS = { clouds2:'CLOUDS2', waves:'WAVES', net:'NET', fog:'FOG' };
+
+    let effect = null;
+    let currentEffect = 'clouds2';
+    let currentMode = 'light';
+
+    function getMode() { return document.body.dataset.mode || 'light'; }
+
+    function apply(effectKey) {
+      if (effect) { effect.destroy(); effect = null; }
+      const mode = getMode();
+      const cfg = MODES[mode][effectKey];
+      const key = VANTA_KEYS[effectKey];
+      if (!window.VANTA || !window.VANTA[key]) { console.warn('VANTA.' + key + ' not loaded'); return; }
+      effect = window.VANTA[key](Object.assign({ el: '#vanta-bg', mouseControls: true, touchControls: true, gyroControls: false, minHeight: 200, minWidth: 200, scale: 1.0, scaleMobile: 1.0 }, cfg));
+      currentEffect = effectKey;
+      document.querySelectorAll('.sw-btn').forEach(b => b.classList.toggle('active', b.id === 'btn-' + effectKey));
+    }
+
+    function setMode(m) {
+      currentMode = m;
+      document.body.dataset.mode = m;
+      document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.m === m));
+      apply(currentEffect);
+    }
+
+    // Wire up buttons
+    ['clouds2','waves','net','fog'].forEach(k => {
+      document.getElementById('btn-' + k).addEventListener('click', () => apply(k));
+    });
+    document.querySelectorAll('.mode-btn').forEach(b => {
+      b.addEventListener('click', () => setMode(b.dataset.m));
+    });
+
+    // Init
+    apply('clouds2');
+  })();
+  </script>
+</body>
+</html>

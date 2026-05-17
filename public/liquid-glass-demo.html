@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liquid Glass Demo — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { overflow: hidden; font-family: 'Inter', sans-serif; }
+
+    canvas#blobs { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; }
+
+    /* SVG displacement filter for glass wobble */
+    svg.filters { position: fixed; width: 0; height: 0; }
+
+    .page {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+    }
+
+    /* ── Header with glass effect ── */
+    .page-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 2rem 2.5rem;
+      /* liquid glass panel */
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .ph-left { display: flex; flex-direction: column; gap: 0.3rem; }
+    .ph-mark {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; color: var(--ink-faint); letter-spacing: 0.04em;
+    }
+    .ph-glyph { font-size: 1rem; color: var(--ink-mid); }
+    .ph-name { font-size: 2rem; font-weight: 700; letter-spacing: -0.04em; color: var(--ink); line-height: 1.1; }
+    .ph-bio  { font-size: 0.85rem; color: var(--ink-mid); }
+    .ph-links { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--ink-faint); }
+
+    .ph-stats { display: flex; gap: 1.5rem; }
+    .ph-stats div { display: flex; flex-direction: column; gap: 0.15rem; }
+    .ph-stats dt { font-size: 0.65rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.08em; }
+    .ph-stats dd { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 500; color: var(--ink); }
+
+    /* ── Fake project cards ── */
+    .cards {
+      position: fixed; bottom: 5.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 1rem;
+    }
+    .card {
+      width: 200px; height: 120px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px) saturate(1.3);
+      -webkit-backdrop-filter: blur(20px) saturate(1.3);
+      padding: 1rem;
+      /* inner highlight — key to glass look */
+      box-shadow: inset 0 1px 0 var(--glass-highlight), 0 4px 24px rgba(0,0,0,0.08);
+    }
+    .card-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint);
+    }
+    .card-title { font-size: 0.9rem; font-weight: 600; color: var(--ink); margin-top: 0.35rem; }
+    .card-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 0.6rem; animation: pulse 2s ease infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    /* ── Mode row ── */
+    .mode-row {
+      position: fixed; top: 1rem; right: 1.5rem;
+      display: flex; gap: 0.4rem; z-index: 20;
+    }
+    .mode-btn {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+      padding: 0.25rem 0.6rem; border: 1px solid var(--glass-border); border-radius: 3px;
+      cursor: pointer; background: var(--glass-bg);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      color: var(--ink-mid); transition: background 0.15s;
+    }
+    .mode-btn.active { background: var(--ink); color: var(--bg); border-color: var(--ink); backdrop-filter: none; }
+
+    .label {
+      position: fixed; bottom: 1.2rem; left: 50%; transform: translateX(-50%);
+      font-family: 'JetBrains Mono', monospace; font-size: 0.65rem;
+      color: var(--ink-faint); letter-spacing: 0.08em; white-space: nowrap; z-index: 20;
+    }
+
+    /* ── Color modes ── */
+    :root, [data-mode="light"] {
+      --bg: #F5ECD7;
+      --ink: #1A1208;
+      --ink-mid: #3A2A18;
+      --ink-faint: #5A4A38;
+      --glass-bg: rgba(245,236,215,0.35);
+      --glass-border: rgba(245,236,215,0.6);
+      --glass-highlight: rgba(255,255,255,0.5);
+      --blob1: #E8A87C; --blob2: #A8C4E0; --blob3: #C4A8D8; --blob4: #A8D4B8;
+    }
+    [data-mode="dark"] {
+      --bg: #1A1510;
+      --ink: #FFFFFF;
+      --ink-mid: #F0EAE0;
+      --ink-faint: #E0D8D0;
+      --glass-bg: rgba(26,21,16,0.4);
+      --glass-border: rgba(255,255,255,0.08);
+      --glass-highlight: rgba(255,255,255,0.06);
+      --blob1: #6B3A1F; --blob2: #1A3A5C; --blob3: #4A2A5C; --blob4: #1A4A30;
+    }
+    [data-mode="navy"] {
+      --bg: #050D1A;
+      --ink: #FFFFFF;
+      --ink-mid: #EAF0FF;
+      --ink-faint: #D8E4F8;
+      --glass-bg: rgba(5,13,26,0.4);
+      --glass-border: rgba(200,216,240,0.1);
+      --glass-highlight: rgba(200,216,240,0.06);
+      --blob1: #0A3060; --blob2: #1A1060; --blob3: #0A4040; --blob4: #301060;
+    }
+  </style>
+</head>
+<body data-mode="light">
+
+  <!-- SVG filter for subtle refraction on glass panels (optional enhancement) -->
+  <svg class="filters" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="glass-blur">
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+        <feDisplacementMap in="SourceGraphic" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <canvas id="blobs"></canvas>
+
+  <div class="page">
+    <header class="page-head">
+      <div class="ph-left">
+        <div class="ph-mark"><span class="ph-glyph">◐</span> evenrbrekne / portfolio</div>
+        <h1 class="ph-name">Even R Brekne</h1>
+        <p class="ph-bio">IT-Konsulent</p>
+        <div class="ph-links">website ↗</div>
+      </div>
+      <dl class="ph-stats">
+        <div><dt>Projects</dt><dd>12</dd></div>
+        <div><dt>Shipped</dt><dd>06</dd></div>
+        <div><dt>WIP</dt><dd>04</dd></div>
+        <div><dt>Last commit</dt><dd>8h ago</dd></div>
+      </dl>
+    </header>
+  </div>
+
+  <div class="mode-row">
+    <button class="mode-btn active" data-m="light">light</button>
+    <button class="mode-btn" data-m="dark">dark</button>
+    <button class="mode-btn" data-m="navy">navy</button>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-tag">App · WIP</div>
+      <div class="card-title">Kritisk Læring</div>
+      <div class="card-dot" style="background:#4ade80;box-shadow:0 0 5px #4ade80"></div>
+    </div>
+    <div class="card">
+      <div class="card-tag">Website · Shipped</div>
+      <div class="card-title">Portfolio v2</div>
+      <div class="card-dot" style="background:#60a5fa;box-shadow:0 0 5px #60a5fa"></div>
+    </div>
+  </div>
+
+  <p class="label">LIQUID GLASS DEMO — Beveg musen, farger følger</p>
+
+  <script>
+  (function () {
+    const canvas = document.getElementById('blobs');
+    const ctx = canvas.getContext('2d');
+
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Color palettes per mode
+    const palettes = {
+      light: ['#E8A87C','#A8C4E0','#C4A8D8','#A8D4B8','#E8C87C','#C8A0C0'],
+      dark:  ['#8B3A1F','#1A4A7C','#5A2A7C','#1A5A30','#7A5010','#5A1A5A'],
+      navy:  ['#0A3870','#1A1080','#0A5050','#301880','#0A2850','#183860'],
+    };
+
+    let mouse = { x: window.innerWidth/2, y: window.innerHeight/2 };
+    window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+    function getMode() { return document.body.dataset.mode || 'light'; }
+
+    // Blobs
+    const NUM = 6;
+    const blobs = Array.from({length: NUM}, (_, i) => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      r: 200 + Math.random() * 250,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      phase: Math.random() * Math.PI * 2,
+      speed: 0.3 + Math.random() * 0.4,
+    }));
+
+    let t = 0;
+    function frame() {
+      t += 0.005;
+      const W = canvas.width, H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+
+      // Draw bg
+      const pal = palettes[getMode()];
+
+      // Mouse influence: gently attract nearest blob
+      let minDist = Infinity, closest = null;
+      blobs.forEach(b => {
+        const d = Math.hypot(b.x - mouse.x, b.y - mouse.y);
+        if (d < minDist) { minDist = d; closest = b; }
+      });
+      if (closest && minDist < 400) {
+        const strength = 0.0015 * (1 - minDist/400);
+        closest.vx += (mouse.x - closest.x) * strength;
+        closest.vy += (mouse.y - closest.y) * strength;
+      }
+
+      blobs.forEach((b, i) => {
+        // Gentle wandering
+        b.vx += Math.sin(t * b.speed + b.phase) * 0.015;
+        b.vy += Math.cos(t * b.speed + b.phase * 1.3) * 0.015;
+        // Dampen
+        b.vx *= 0.98; b.vy *= 0.98;
+        // Clamp speed
+        const spd = Math.hypot(b.vx, b.vy);
+        if (spd > 1.5) { b.vx *= 1.5/spd; b.vy *= 1.5/spd; }
+        // Move
+        b.x += b.vx; b.y += b.vy;
+        // Bounce
+        if (b.x < -b.r) b.x = W + b.r;
+        if (b.x > W + b.r) b.x = -b.r;
+        if (b.y < -b.r) b.y = H + b.r;
+        if (b.y > H + b.r) b.y = -b.r;
+
+        // Pulsing radius
+        const r = b.r * (1 + 0.1 * Math.sin(t * b.speed * 0.7 + b.phase));
+
+        const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, r);
+        const col = pal[i % pal.length];
+        g.addColorStop(0, col + 'CC');
+        g.addColorStop(0.5, col + '55');
+        g.addColorStop(1, col + '00');
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = g;
+        ctx.fill();
+      });
+
+      requestAnimationFrame(frame);
+    }
+    frame();
+
+    // Mode buttons
+    document.querySelectorAll('.mode-btn').forEach(b => {
+      b.addEventListener('click', () => {
+        document.body.dataset.mode = b.dataset.m;
+        document.querySelectorAll('.mode-btn').forEach(x => x.classList.toggle('active', x === b));
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

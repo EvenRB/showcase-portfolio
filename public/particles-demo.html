@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Particles Demo — Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { overflow: hidden; font-family: 'Inter', sans-serif; }
+
+    canvas#p { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; }
+
+    .page { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+    .page-head {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      padding: 2rem 2.5rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .ph-left { display: flex; flex-direction: column; gap: 0.3rem; }
+    .ph-mark {
+      display: flex; align-items: center; gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+      color: var(--ink-faint); letter-spacing: 0.04em;
+    }
+    .ph-glyph { font-size: 1rem; color: var(--ink-mid); }
+    .ph-name { font-size: 2rem; font-weight: 700; letter-spacing: -0.04em; color: var(--ink); line-height: 1.1; }
+    .ph-bio  { font-size: 0.85rem; color: var(--ink-mid); }
+    .ph-links { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--ink-faint); }
+    .ph-stats { display: flex; gap: 1.5rem; }
+    .ph-stats div { display: flex; flex-direction: column; gap: 0.15rem; }
+    .ph-stats dt { font-size: 0.65rem; color: var(--ink-faint); text-transform: uppercase; letter-spacing: 0.08em; }
+    .ph-stats dd { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 500; color: var(--ink); }
+
+    .cards {
+      position: fixed; bottom: 5.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 1rem;
+    }
+    .card {
+      width: 200px; height: 120px; border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--card-bg);
+      padding: 1rem;
+    }
+    .card-tag { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-faint); }
+    .card-title { font-size: 0.9rem; font-weight: 600; color: var(--ink); margin-top: 0.35rem; }
+    .card-dot { width: 6px; height: 6px; border-radius: 50%; margin-top: 0.6rem; animation: pulse 2s ease infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .mode-row {
+      position: fixed; top: 1rem; right: 1.5rem;
+      display: flex; gap: 0.4rem; z-index: 20;
+    }
+    .mode-btn {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+      padding: 0.25rem 0.6rem; border: 1px solid var(--line); border-radius: 3px;
+      cursor: pointer; background: var(--card-bg); color: var(--ink-mid);
+    }
+    .mode-btn.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+    /* Style switcher */
+    .switcher {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; gap: 0.5rem; align-items: center;
+      background: var(--card-bg);
+      border: 1px solid var(--line); border-radius: 8px;
+      padding: 0.5rem 0.75rem; z-index: 20;
+    }
+    .switcher span { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; letter-spacing: 0.08em; color: var(--ink-mid); margin-right: 0.25rem; }
+    .sw-btn {
+      font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; font-weight: 500;
+      padding: 0.3rem 0.8rem; border: 1px solid var(--line); border-radius: 4px;
+      cursor: pointer; background: transparent; color: var(--ink-mid); transition: background 0.15s, color 0.15s;
+    }
+    .sw-btn.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .sw-btn:hover:not(.active) { background: var(--line); }
+
+    :root, [data-mode="light"] {
+      --bg: #F5ECD7;
+      --ink: #2A2118;
+      --ink-mid: #7A6A58;
+      --ink-faint: #B0A090;
+      --line: rgba(42,33,24,0.12);
+      --card-bg: rgba(245,236,215,0.8);
+      --p-dot: rgba(42,33,24,0.5);
+      --p-line: rgba(42,33,24,0.12);
+    }
+    [data-mode="dark"] {
+      --bg: #1A1510;
+      --ink: #EDE0CC;
+      --ink-mid: #8A7A68;
+      --ink-faint: #5A4A38;
+      --line: rgba(237,224,204,0.1);
+      --card-bg: rgba(26,21,16,0.85);
+      --p-dot: rgba(200,180,140,0.6);
+      --p-line: rgba(200,180,140,0.08);
+    }
+    [data-mode="navy"] {
+      --bg: #050D1A;
+      --ink: #C8D8F0;
+      --ink-mid: #6888B0;
+      --ink-faint: #304860;
+      --line: rgba(200,216,240,0.1);
+      --card-bg: rgba(5,13,26,0.85);
+      --p-dot: rgba(100,160,220,0.6);
+      --p-line: rgba(100,160,220,0.08);
+    }
+  </style>
+</head>
+<body data-mode="light">
+  <canvas id="p"></canvas>
+
+  <div class="page">
+    <header class="page-head">
+      <div class="ph-left">
+        <div class="ph-mark"><span class="ph-glyph">◐</span> evenrbrekne / portfolio</div>
+        <h1 class="ph-name">Even R Brekne</h1>
+        <p class="ph-bio">IT-Konsulent</p>
+        <div class="ph-links">website ↗</div>
+      </div>
+      <dl class="ph-stats">
+        <div><dt>Projects</dt><dd>12</dd></div>
+        <div><dt>Shipped</dt><dd>06</dd></div>
+        <div><dt>WIP</dt><dd>04</dd></div>
+        <div><dt>Last commit</dt><dd>8h ago</dd></div>
+      </dl>
+    </header>
+  </div>
+
+  <div class="mode-row">
+    <button class="mode-btn active" data-m="light">light</button>
+    <button class="mode-btn" data-m="dark">dark</button>
+    <button class="mode-btn" data-m="navy">navy</button>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-tag">App · WIP</div>
+      <div class="card-title">Kritisk Læring</div>
+      <div class="card-dot" style="background:#4ade80;box-shadow:0 0 5px #4ade80"></div>
+    </div>
+    <div class="card">
+      <div class="card-tag">Website · Shipped</div>
+      <div class="card-title">Portfolio v2</div>
+      <div class="card-dot" style="background:#60a5fa;box-shadow:0 0 5px #60a5fa"></div>
+    </div>
+  </div>
+
+  <div class="switcher">
+    <span>STIL:</span>
+    <button class="sw-btn active" id="btn-network">Network</button>
+    <button class="sw-btn" id="btn-float">Float</button>
+    <button class="sw-btn" id="btn-repel">Repel</button>
+  </div>
+
+  <script>
+  (function () {
+    const canvas = document.getElementById('p');
+    const ctx = canvas.getContext('2d');
+
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; initParticles(); }
+    window.addEventListener('resize', resize);
+
+    let style = 'network'; // network | float | repel
+    let mouse = { x: -9999, y: -9999 };
+    window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+    window.addEventListener('mouseleave', () => { mouse.x = -9999; mouse.y = -9999; });
+
+    function getMode() { return document.body.dataset.mode || 'light'; }
+
+    function parseCSSColor(varName) {
+      const v = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+      return v;
+    }
+
+    let particles = [];
+
+    function initParticles() {
+      const W = canvas.width, H = canvas.height;
+      const count = Math.floor((W * H) / 12000);
+      particles = Array.from({length: Math.min(count, 120)}, () => ({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        r: 2 + Math.random() * 2,
+        phase: Math.random() * Math.PI * 2,
+      }));
+    }
+
+    function getCols() {
+      const mode = getMode();
+      const dots = {
+        light: 'rgba(42,33,24,',
+        dark:  'rgba(200,180,140,',
+        navy:  'rgba(100,160,220,',
+      };
+      const lines = {
+        light: 'rgba(42,33,24,',
+        dark:  'rgba(200,180,140,',
+        navy:  'rgba(100,160,220,',
+      };
+      return { dot: dots[mode], line: lines[mode] };
+    }
+
+    let t = 0;
+    function frame() {
+      t += 0.008;
+      const W = canvas.width, H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+
+      const { dot, line } = getCols();
+      const CONNECT = 120;
+      const REPEL_R = 100;
+
+      particles.forEach(p => {
+        if (style === 'float') {
+          // Gentle float with sine wave
+          p.x += p.vx + Math.sin(t + p.phase) * 0.2;
+          p.y += p.vy + Math.cos(t * 0.7 + p.phase) * 0.2;
+        } else if (style === 'repel') {
+          const dx = p.x - mouse.x, dy = p.y - mouse.y;
+          const d = Math.hypot(dx, dy);
+          if (d < REPEL_R && d > 0) {
+            const force = (REPEL_R - d) / REPEL_R * 1.5;
+            p.vx += (dx / d) * force;
+            p.vy += (dy / d) * force;
+          }
+          p.vx *= 0.92; p.vy *= 0.92;
+          p.x += p.vx; p.y += p.vy;
+        } else {
+          // Network — standard wander
+          p.x += p.vx;
+          p.y += p.vy;
+        }
+
+        // Bounce
+        if (p.x < 0)  { p.x = 0;  p.vx *= -1; }
+        if (p.x > W)  { p.x = W;  p.vx *= -1; }
+        if (p.y < 0)  { p.y = 0;  p.vy *= -1; }
+        if (p.y > H)  { p.y = H;  p.vy *= -1; }
+      });
+
+      // Draw connections
+      if (style === 'network' || style === 'repel') {
+        for (let i = 0; i < particles.length; i++) {
+          const a = particles[i];
+          for (let j = i + 1; j < particles.length; j++) {
+            const b = particles[j];
+            const d = Math.hypot(a.x - b.x, a.y - b.y);
+            if (d < CONNECT) {
+              const alpha = (1 - d / CONNECT) * 0.5;
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.strokeStyle = line + alpha + ')';
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            }
+          }
+          // Mouse connections
+          if (style === 'network') {
+            const dm = Math.hypot(a.x - mouse.x, a.y - mouse.y);
+            if (dm < CONNECT * 1.5) {
+              const alpha = (1 - dm / (CONNECT * 1.5)) * 0.6;
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(mouse.x, mouse.y);
+              ctx.strokeStyle = line + alpha + ')';
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      // Draw dots
+      particles.forEach(p => {
+        const pulse = style === 'float' ? 0.15 * Math.sin(t * 1.5 + p.phase) : 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * (1 + pulse), 0, Math.PI * 2);
+        ctx.fillStyle = dot + '0.7)';
+        ctx.fill();
+      });
+
+      // Mouse dot (network + repel)
+      if (style !== 'float' && mouse.x > 0) {
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = dot + '0.4)';
+        ctx.fill();
+      }
+
+      requestAnimationFrame(frame);
+    }
+
+    // Buttons
+    ['network','float','repel'].forEach(k => {
+      document.getElementById('btn-' + k).addEventListener('click', () => {
+        style = k;
+        document.querySelectorAll('.sw-btn').forEach(b => b.classList.toggle('active', b.id === 'btn-' + k));
+      });
+    });
+    document.querySelectorAll('.mode-btn').forEach(b => {
+      b.addEventListener('click', () => {
+        document.body.dataset.mode = b.dataset.m;
+        document.querySelectorAll('.mode-btn').forEach(x => x.classList.toggle('active', x === b));
+      });
+    });
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    initParticles();
+    frame();
+  })();
+  </script>
+</body>
+</html>
