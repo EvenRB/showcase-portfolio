@@ -7,7 +7,7 @@ dateRange: "2026"
 tags: ["App", "Education"]
 description: "Koordineringsverktøy for Røde Kors Hjelpekorps — oversikt over hvem som har gjennomført grunnutdanningen."
 url: "https://hjelpekorps-prosjekt.vercel.app/"
-repo: "knyttneven/hjelpekorps-prosjekt"
+repo: "EvenRB/hjelpekorps-prosjekt"
 employer: "Røde Kors"
 featured: true
 previewBase: "#1a0a0a"

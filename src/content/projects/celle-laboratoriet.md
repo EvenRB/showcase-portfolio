@@ -6,8 +6,8 @@ status: WIP
 dateRange: "2026 → ongoing"
 tags: ["Education"]
 description: "Interaktivt 3D-undervisningsverktøy i cellebiologi for norsk skole (LK20)."
-url: "https://knyttneven.github.io/celle-lab/"
-repo: "knyttneven/celle-lab"
+url: "https://EvenRB.github.io/celle-lab/"
+repo: "EvenRB/celle-lab"
 featured: true
 previewBase: "#0d1a0f"
 previewAccent: "#4ade80"

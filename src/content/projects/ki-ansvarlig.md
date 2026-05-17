@@ -6,8 +6,8 @@ status: Shipped
 dateRange: "Apr 2026"
 tags: ["Education", "App"]
 description: "Interaktiv sjekkliste som hjelper lærere og skoleledere å ta informerte valg om KI-bruk."
-url: "https://knyttneven.github.io/ki-ansvarlig/"
-repo: "knyttneven/ki-ansvarlig"
+url: "https://EvenRB.github.io/ki-ansvarlig/"
+repo: "EvenRB/ki-ansvarlig"
 featured: false
 previewBase: "#0a1a15"
 previewAccent: "#10b981"

@@ -6,8 +6,8 @@ status: Shipped
 dateRange: "Apr 2026"
 tags: ["Education", "App"]
 description: "Praktisk KI-promptverktøy for lærere i videregående skole, bygget rundt Microsoft Copilot."
-url: "https://knyttneven.github.io/Ki-klasserommet/"
-repo: "knyttneven/Ki-klasserommet"
+url: "https://EvenRB.github.io/Ki-klasserommet/"
+repo: "EvenRB/Ki-klasserommet"
 featured: false
 previewBase: "#0a1628"
 previewAccent: "#2196f3"
