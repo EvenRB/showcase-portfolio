@@ -1,0 +1,19 @@
+---
+import { TECH, techIconUrl, techName } from '../lib/techIcons';
+
+interface Props {
+  tech: string[];
+  max?: number;
+}
+const { tech, max = 5 } = Astro.props;
+const items = (tech ?? []).filter(k => TECH[k]).slice(0, max);
+---
+{items.length > 0 && (
+  <div class="tech-rail">
+    {items.map((k, i) => (
+      <span class="ti" style={`--i:${i}`} data-name={techName(k)}>
+        <img src={techIconUrl(k)} alt={techName(k)} loading="lazy" width="20" height="20" />
+      </span>
+    ))}
+  </div>
+)}

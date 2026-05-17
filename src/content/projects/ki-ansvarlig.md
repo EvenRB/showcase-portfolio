@@ -5,6 +5,7 @@ type: Project
 status: Shipped
 dateRange: "Apr 2026"
 tags: ["Education", "App"]
+tech: ["html", "css", "js"]
 description: "Interaktiv sjekkliste som hjelper lærere og skoleledere å ta informerte valg om KI-bruk."
 url: "https://EvenRB.github.io/ki-ansvarlig/"
 repo: "EvenRB/ki-ansvarlig"

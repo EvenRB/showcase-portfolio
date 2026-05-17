@@ -1313,7 +1313,8 @@ html, body, #root {
   flex-direction: column;
   background: var(--bg);
   border: 1px solid var(--line);
-  overflow: hidden;
+  overflow: visible;
+  position: relative;
 }
 .card.cd .cd-preview {
   position: relative;
@@ -1462,6 +1463,76 @@ html, body, #root {
 }
 .cd-visit-bar:hover .cd-visit-arrow {
   transform: translate(2px, -2px);
+}
+
+/* ── Tech icon rail ── */
+.tech-rail {
+  position: absolute;
+  right: -16px;
+  top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  z-index: 10;
+  pointer-events: none;
+}
+.ti {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.10);
+  transition: transform 0.22s cubic-bezier(.2,.7,.3,1);
+  transition-delay: calc(var(--i, 0) * 28ms);
+  pointer-events: auto;
+}
+.ti img {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+.card.cd:hover .ti {
+  transform: translateX(5px);
+}
+.ti::after {
+  content: attr(data-name);
+  position: absolute;
+  right: calc(100% + 9px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--ink);
+  color: var(--bg);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  z-index: 20;
+}
+.ti::before {
+  content: '';
+  position: absolute;
+  right: calc(100% + 5px);
+  top: 50%;
+  transform: translateY(-50%);
+  border: 4px solid transparent;
+  border-left-color: var(--ink);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  z-index: 20;
+}
+.ti:hover::after,
+.ti:hover::before {
+  opacity: 1;
 }
 
 /* Hover lift / shared */
@@ -1823,6 +1894,18 @@ html, body, #root {
 .dv-val.empty { color: var(--mute-2); }
 .dv-val a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--mute-2); }
 .dv-val a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.dv-tech-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.dv-ti {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 8px 3px 5px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  border-radius: 20px;
+  font-size: 12px;
+  color: var(--ink);
+}
+.dv-ti img { width: 14px; height: 14px; display: block; }
+.dv-ti-name { font-family: var(--font-mono); }
 
 .dv-pill {
   display: inline-flex; align-items: center; gap: 6px;

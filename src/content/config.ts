@@ -9,6 +9,7 @@ const projects = defineCollection({
     emoji:       z.string().optional(),
     dateRange:   z.string().optional(),
     tags:        z.array(z.string()).default([]),
+    tech:        z.array(z.string()).default([]),
     description: z.string().optional(),
     url:         z.string().url().optional(),     // live URL (deployed site)
     screenshotUrl: z.string().url().optional(), // overrides url for microlink screenshot

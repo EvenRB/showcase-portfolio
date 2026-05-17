@@ -5,6 +5,7 @@ type: Project
 status: WIP
 dateRange: "2026 → ongoing"
 tags: ["Education"]
+tech: ["three", "js", "github"]
 description: "Interaktivt 3D-undervisningsverktøy i cellebiologi for norsk skole (LK20)."
 url: "https://EvenRB.github.io/celle-lab/"
 repo: "EvenRB/celle-lab"

@@ -5,6 +5,7 @@ type: Project
 status: Shipped
 dateRange: "Mai 2026"
 tags: ["Education", "App"]
+tech: ["next", "ts", "tailwind", "shadcn", "github"]
 description: "Interaktivt nettverktøy som lærer folk å tenke kritisk om KI-svar — ikke ved å forklare, men ved å la dem oppleve forskjellen selv."
 url: "https://EvenRB.github.io/kritisk-laering/"
 screenshotUrl: "https://EvenRB.github.io/kritisk-laering/?v=1"

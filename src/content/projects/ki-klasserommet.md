@@ -5,6 +5,7 @@ type: Project
 status: Shipped
 dateRange: "Apr 2026"
 tags: ["Education", "App"]
+tech: ["html", "css", "js"]
 description: "Praktisk KI-promptverktøy for lærere i videregående skole, bygget rundt Microsoft Copilot."
 url: "https://EvenRB.github.io/Ki-klasserommet/"
 repo: "EvenRB/Ki-klasserommet"

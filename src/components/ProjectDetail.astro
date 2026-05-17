@@ -4,6 +4,7 @@ import LivePreview from './LivePreview.astro';
 import LangBar    from './LangBar.astro';
 import type { Project } from '../lib/projects';
 import { hostOf } from '../lib/projects';
+import { TECH, techIconUrl, techName } from '../lib/techIcons';
 
 interface Props {
   p: Project;
@@ -49,6 +50,20 @@ const repoUrl = d.repoUrl ?? (d.repo ? `https://github.com/${d.repo}` : '');
       <span class="dv-key"><span class="dv-key-glyph">◇</span><span>Tags</span></span>
       <span class="dv-val">{d.tags.map(t => <span class={tagClass(t)}>{t}</span>)}</span>
     </div>
+
+    {d.tech && d.tech.length > 0 && (
+      <div class="dv-row">
+        <span class="dv-key"><span class="dv-key-glyph">⬡</span><span>Tech</span></span>
+        <span class="dv-val dv-tech-row">
+          {d.tech.filter(k => TECH[k]).map(k => (
+            <span class="dv-ti" title={techName(k)}>
+              <img src={techIconUrl(k)} alt={techName(k)} loading="lazy" width="16" height="16" />
+              <span class="dv-ti-name">{techName(k)}</span>
+            </span>
+          ))}
+        </span>
+      </div>
+    )}
 
     <div class="dv-row">
       <span class="dv-key"><span class="dv-key-glyph">≡</span><span>Description</span></span>

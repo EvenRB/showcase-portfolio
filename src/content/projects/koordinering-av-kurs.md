@@ -5,6 +5,7 @@ type: Freelance Gig
 status: Shipped
 dateRange: "2026"
 tags: ["App", "Education"]
+tech: ["react", "vite", "ts", "supabase", "vercel"]
 description: "Koordineringsverktøy for Røde Kors Hjelpekorps — oversikt over hvem som har gjennomført grunnutdanningen."
 url: "https://hjelpekorps-prosjekt.vercel.app/"
 repo: "EvenRB/hjelpekorps-prosjekt"
