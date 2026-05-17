@@ -2140,9 +2140,9 @@ html, body, #root {
   z-index: 1;
 }
 
-.page.theme-stone                    { background: rgba(250, 248, 244, 0.50); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-[data-mode="dark"] .page.theme-stone { background: rgba(20,  17,  12,  0.50); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-[data-mode="navy"] .page.theme-stone { background: rgba(14,  24,  40,  0.50); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.page.theme-stone                    { background: rgba(250, 248, 244, 0.82); }
+[data-mode="dark"] .page.theme-stone { background: rgba(20,  17,  12,  0.82); }
+[data-mode="navy"] .page.theme-stone { background: rgba(14,  24,  40,  0.82); }
 
 [data-mode="dark"] .page.theme-stone .page-head,
 [data-mode="navy"] .page.theme-stone .page-head {
