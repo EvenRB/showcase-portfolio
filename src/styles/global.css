@@ -39,15 +39,6 @@
   --blob-4: #80C4A0; --blob-5: #E09040; --blob-6: #A870B8;
 }
 
-[data-mode="dark"] {
-  --blob-1: #C0522A; --blob-2: #2A6AAC; --blob-3: #7A3AAC;
-  --blob-4: #2A7A44; --blob-5: #A07020; --blob-6: #7A2A7A;
-}
-[data-mode="navy"] {
-  --blob-1: #1A60D0; --blob-2: #2A28C0; --blob-3: #0A7878;
-  --blob-4: #4428C0; --blob-5: #1A4888; --blob-6: #283898;
-}
-
 [data-density="compact"] { --gap: 10px; --card-pad: 14px; --card-pad-y: 14px; }
 [data-density="normal"]  { --gap: 16px; --card-pad: 20px; --card-pad-y: 20px; }
 [data-density="roomy"]   { --gap: 24px; --card-pad: 28px; --card-pad-y: 28px; }
@@ -2112,103 +2103,43 @@ html, body, #root {
 }
 
 /* ────────────────── A · STONE — Dark (warm black) ────────────────── */
-[data-mode="dark"] .page.theme-stone {
-  --bg:       #14110C;
-  --bg-2:     #1D1812;
-  --bg-3:     #28221A;
-  --ink:      #F4EFE1;
-  --ink-2:    #E5DFCD;
-  --ink-3:    #C3BBA5;
-  --mute:     #8C8674;
-  --mute-2:   #5F5B50;
-  --mute-3:   #3A3631;
-  --line:     #2A2620;
-  --line-2:   #36322A;
-  --accent:   #FF7A3D;
-}
+
 
 /* ────────────────── A · STONE — Midnight Navy ────────────────── */
-[data-mode="navy"] .page.theme-stone {
-  --bg:       #0E1828;
-  --bg-2:     #15223A;
-  --bg-3:     #1D2D49;
-  --ink:      #E8EDF7;
-  --ink-2:    #D1D8EA;
-  --ink-3:    #A8B2CA;
-  --mute:     #6F7B96;
-  --mute-2:   #4D5774;
-  --mute-3:   #2C3555;
-  --line:     #1F2C45;
-  --line-2:   #29385A;
-  --accent:   #FFB05A;
-}
+
 
 /* ─── Adjustments that need explicit tones outside the token map ─── */
 
 /* Placeholder pattern color */
-[data-mode="dark"] .page.theme-stone .placeholder,
-[data-mode="navy"] .page.theme-stone .placeholder {
-  background: var(--bg-2);
-  background-image: repeating-linear-gradient(
-    -45deg, transparent 0 11px, rgba(255,255,255,0.03) 11px 12px
-  );
-}
-[data-mode="dark"] .page.theme-stone .ph-caption,
-[data-mode="navy"] .page.theme-stone .ph-caption {
-  background: var(--bg-3);
-  border-color: var(--line-2);
-  color: var(--mute);
-}
-[data-mode="dark"] .page.theme-stone .ph-glyph,
-[data-mode="navy"] .page.theme-stone .ph-glyph {
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
-  border-color: var(--accent);
-}
-[data-mode="dark"] .page.theme-stone .fb-view-btn.is-active,
-[data-mode="navy"] .page.theme-stone .fb-view-btn.is-active { background: var(--bg-2); }
+
+
+
+
 
 /* Tags / status / type pills tone down on dark backgrounds */
-[data-mode="dark"] .page.theme-stone .cd-status,
-[data-mode="dark"] .page.theme-stone .cd-tag,
-[data-mode="dark"] .page.theme-stone .dv-pill,
-[data-mode="navy"] .page.theme-stone .cd-status,
-[data-mode="navy"] .page.theme-stone .cd-tag,
-[data-mode="navy"] .page.theme-stone .dv-pill {
-  background: var(--bg-2);
-  border-color: var(--line-2);
-  color: var(--ink-2);
-}
-[data-mode="dark"] .page.theme-stone .dv-pill.tag-app    { background: #2A2030; border-color: #3A2B45; color: #D8B5FF; }
-[data-mode="dark"] .page.theme-stone .dv-pill.tag-edu    { background: #2B240F; border-color: #3D3415; color: #F4D88A; }
-[data-mode="dark"] .page.theme-stone .dv-pill.tag-web    { background: #0F2A1C; border-color: #1A3D2A; color: #8BD9A8; }
-[data-mode="dark"] .page.theme-stone .dv-pill.tag-data,
-[data-mode="dark"] .page.theme-stone .dv-pill.tag-comms  { background: #142136; border-color: #1F3050; color: #9DBAF8; }
-[data-mode="dark"] .page.theme-stone .dv-pill.type-project   { background: #142136; border-color: #1F3050; color: #9DBAF8; }
-[data-mode="dark"] .page.theme-stone .dv-pill.type-job       { background: #0F2A1C; border-color: #1A3D2A; color: #8BD9A8; }
-[data-mode="dark"] .page.theme-stone .dv-pill.type-freelance { background: #2B240F; border-color: #3D3415; color: #F4D88A; }
 
-[data-mode="navy"] .page.theme-stone .dv-pill.tag-app    { background: #1F2545; border-color: #2D3560; color: #B8C1F5; }
-[data-mode="navy"] .page.theme-stone .dv-pill.tag-edu    { background: #2B2818; border-color: #3D3922; color: #F4D88A; }
-[data-mode="navy"] .page.theme-stone .dv-pill.tag-web    { background: #15302A; border-color: #1F4035; color: #8BD9C2; }
-[data-mode="navy"] .page.theme-stone .dv-pill.tag-data,
-[data-mode="navy"] .page.theme-stone .dv-pill.tag-comms  { background: #1A2A45; border-color: #25395A; color: #9DBAF8; }
-[data-mode="navy"] .page.theme-stone .dv-pill.type-project   { background: #1A2A45; border-color: #25395A; color: #9DBAF8; }
-[data-mode="navy"] .page.theme-stone .dv-pill.type-job       { background: #15302A; border-color: #1F4035; color: #8BD9C2; }
-[data-mode="navy"] .page.theme-stone .dv-pill.type-freelance { background: #2B2818; border-color: #3D3922; color: #F4D88A; }
 
-[data-mode="dark"] .page.theme-stone .detail-stats,
-[data-mode="dark"] .page.theme-stone .dv-langstrip,
-[data-mode="navy"] .page.theme-stone .detail-stats,
-[data-mode="navy"] .page.theme-stone .dv-langstrip { background: var(--bg-2); }
 
-[data-mode="dark"] .page.theme-stone .dv-icon,
-[data-mode="navy"] .page.theme-stone .dv-icon { background: var(--bg-2); border-color: var(--line-2); }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /* Card invert hover gets re-toned (it was assuming light bg) */
-[data-mode="dark"] .page.theme-stone[data-hover="invert"] .card:hover,
-[data-mode="navy"] .page.theme-stone[data-hover="invert"] .card:hover {
-  background: var(--ink); color: var(--bg);
-}
+
 
 /* ─────────────────────────────────────────────────────────────────
    Liquid glass animated background
@@ -2225,10 +2156,7 @@ html, body, #root {
 }
 
 .page.theme-stone                    { background: rgba(250, 248, 244, 0.40); }
-[data-mode="dark"] .page.theme-stone { background: rgba(20,  17,  12,  0.60); }
-[data-mode="navy"] .page.theme-stone { background: rgba(14,  24,  40,  0.60); }
 
-[data-mode="dark"] .page.theme-stone .page-head,
-[data-mode="navy"] .page.theme-stone .page-head {
-  background: rgba(255, 255, 255, 0.03);
-}
+
+
+

@@ -18,17 +18,7 @@ const { title = 'Even R Brekne — Portfolio', description = 'IT-Konsulent · pr
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
-    <!-- Restore color mode before first paint so we never flash the wrong theme -->
-    <script is:inline>
-      (function () {
-        try {
-          var m = localStorage.getItem('portfolio-mode') || 'light';
-          document.documentElement.dataset.mode = m;
-        } catch (_) {
-          document.documentElement.dataset.mode = 'light';
-        }
-      })();
-    </script>
+    <script is:inline>document.documentElement.dataset.mode = 'light';</script>
   </head>
   <body>
     <canvas id="blob-bg" aria-hidden="true"></canvas>
