@@ -145,9 +145,10 @@ html, body, #root {
 .ph-glyph {
   width: 28px; height: 28px;
   display: inline-flex; align-items: center; justify-content: center;
-  border: 1px solid var(--line-2);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
   font-size: 14px;
-  background: var(--bg);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 .ph-id { font-size: 11px; color: var(--mute); }
 .ph-name {
