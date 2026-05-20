@@ -2223,9 +2223,9 @@ html, body, #root {
   z-index: 1;
 }
 
-.page.theme-stone                    { background: rgba(250, 248, 244, 0.68); }
-[data-mode="dark"] .page.theme-stone { background: rgba(20,  17,  12,  0.82); }
-[data-mode="navy"] .page.theme-stone { background: rgba(14,  24,  40,  0.82); }
+.page.theme-stone                    { background: rgba(250, 248, 244, 0.40); }
+[data-mode="dark"] .page.theme-stone { background: rgba(20,  17,  12,  0.60); }
+[data-mode="navy"] .page.theme-stone { background: rgba(14,  24,  40,  0.60); }
 
 [data-mode="dark"] .page.theme-stone .page-head,
 [data-mode="navy"] .page.theme-stone .page-head {
