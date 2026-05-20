@@ -2161,8 +2161,8 @@ html, body, #root {
 }
 [data-mode="dark"] .page.theme-stone .ph-glyph,
 [data-mode="navy"] .page.theme-stone .ph-glyph {
-  background: var(--bg-2);
-  border-color: var(--line-2);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border-color: var(--accent);
 }
 [data-mode="dark"] .page.theme-stone .fb-view-btn.is-active,
 [data-mode="navy"] .page.theme-stone .fb-view-btn.is-active { background: var(--bg-2); }
