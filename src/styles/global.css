@@ -44,8 +44,8 @@
   --blob-4: #2A7A44; --blob-5: #A07020; --blob-6: #7A2A7A;
 }
 [data-mode="navy"] {
-  --blob-1: #0A3870; --blob-2: #1A1080; --blob-3: #0A5050;
-  --blob-4: #301880; --blob-5: #0A2850; --blob-6: #183860;
+  --blob-1: #1A60D0; --blob-2: #2A28C0; --blob-3: #0A7878;
+  --blob-4: #4428C0; --blob-5: #1A4888; --blob-6: #283898;
 }
 
 [data-density="compact"] { --gap: 10px; --card-pad: 14px; --card-pad-y: 14px; }
