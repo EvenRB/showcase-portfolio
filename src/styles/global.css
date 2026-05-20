@@ -40,8 +40,8 @@
 }
 
 [data-mode="dark"] {
-  --blob-1: #8B3A1F; --blob-2: #1A4A7C; --blob-3: #5A2A7C;
-  --blob-4: #1A5A30; --blob-5: #7A5010; --blob-6: #5A1A5A;
+  --blob-1: #C0522A; --blob-2: #2A6AAC; --blob-3: #7A3AAC;
+  --blob-4: #2A7A44; --blob-5: #A07020; --blob-6: #7A2A7A;
 }
 [data-mode="navy"] {
   --blob-1: #0A3870; --blob-2: #1A1080; --blob-3: #0A5050;
