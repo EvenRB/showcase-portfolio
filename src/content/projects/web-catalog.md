@@ -7,7 +7,7 @@ dateRange: "2026-05 → ongoing"
 tags: ["Education", "Tool"]
 tech: ["astro", "tailwind", "typescript"]
 description: "Kurert URL-katalog for skole og personlig bruk — søk, kategorifilter og live forhåndsvisning av 143+ sider."
-url: "https://web-catalog-zeta.vercel.app"
+url: "https://web-catalog-lemon.vercel.app"
 repo: "EvenRB/webCatalog"
 featured: true
 previewBase: "#FAFAF9"
